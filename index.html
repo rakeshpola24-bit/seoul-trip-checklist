@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seoul Trip Packing Checklist</title>
+<style>
+:root { --ink:#251f21; --ink2:#585254; --hairline:#eae9ea; --teal:#73a89a; --red:#ed313e; --page:#ffffff; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; color: var(--ink); line-height: 1.4; margin: 0; background: #f4efec; }
+.card { max-width: 720px; margin: 0 auto; background: var(--page); padding: 20px 16px 32px; min-height: 100vh; }
+h1 { font-size: 24px; margin: 4px 0 4px; }
+.sub { color: var(--ink2); font-size: 14px; margin-bottom: 10px; }
+.weather { background: #f4efec; border-radius: 12px; padding: 10px 14px; font-size: 14px; margin-bottom: 14px; }
+h2 { font-size: 18px; margin: 22px 0 4px; border-bottom: 1px solid var(--hairline); padding-bottom: 6px; }
+.bagnote { color: var(--ink2); font-size: 13px; margin-bottom: 6px; }
+.warn { background: #f4efec; border-radius: 12px; padding: 10px 14px; font-size: 14px; margin: 8px 0; }
+.warn b { color: var(--ink); }
+.item { display: flex; align-items: flex-start; gap: 12px; width: 100%; min-height: 44px; padding: 10px 4px; background: none; border: none; border-bottom: 1px solid var(--hairline); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.box { flex: 0 0 22px; height: 22px; margin-top: 1px; border: 1.5px solid var(--ink); border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; line-height: 1; }
+.item.done .box { background: var(--teal); border-color: var(--teal); }
+.txt { flex: 1 1 auto; min-width: 0; }
+.name { display: block; font-weight: 600; }
+.item.done .name { text-decoration: line-through; color: var(--ink2); }
+.detail { display: block; margin-top: 2px; font-size: 13px; color: var(--ink2); }
+.kg { flex: 0 0 auto; font-size: 13px; font-weight: 600; color: var(--ink2); margin-top: 2px; }
+.sticky { position: sticky; top: 0; z-index: 5; background: var(--page); border: 1px solid var(--hairline); border-radius: 12px; padding: 12px 14px; margin: 12px 0 4px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.meter { margin-bottom: 10px; }
+.meter-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.meter-label { font-weight: 600; }
+.meter-value { font-weight: 600; color: var(--teal); }
+.meter-value.over { color: var(--red); }
+.bar { height: 8px; border-radius: 4px; background: var(--hairline); overflow: hidden; margin-top: 4px; }
+.fill { height: 100%; background: var(--teal); border-radius: 4px; transition: width .16s ease; }
+.fill.over { background: var(--red); }
+.mnote { margin-top: 4px; font-size: 12px; color: var(--ink2); }
+.prow { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ptext { color: var(--ink2); font-size: 13px; }
+.reset { background: none; border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink2); font: inherit; font-size: 13px; padding: 8px 12px; min-height: 44px; cursor: pointer; }
+ul.nox { margin: 4px 0; padding-left: 4px; list-style: none; }
+ul.nox li { margin: 6px 0; }
+ul.nox li::before { content: "\2717\00a0\00a0"; color: var(--red); font-weight: 700; }
+table { border-collapse: collapse; width: 100%; margin-top: 6px; font-size: 14px; }
+th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+th { background: #f4efec; }
+.facts { margin: 4px 0; }
+.frow { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--hairline); font-size: 14px; flex-wrap: wrap; }
+.flabel { color: var(--ink2); flex: 0 1 40%; }
+.fval { font-weight: 600; text-align: right; flex: 1 1 55%; }
+.foot { margin-top: 22px; font-size: 12px; color: var(--ink2); border-top: 1px solid var(--hairline); padding-top: 10px; }
+a { color: var(--ink); }
+</style></head>
+<body><div class="card">
+
+<h1>Seoul trip packing checklist</h1>
+<div class="sub">Business trip, Seoul &bull; office: Seoul Square, near Seoul Station &bull; Oct 23/24 - Nov 1 (about 9 nights) &bull; <b>1 checked bag max 22 kg + 1 cabin bag max 7 kg</b></div>
+
+<div class="weather"><b>Seoul weather</b> (Korea Meteorological Administration, issued Oct 20): days <b>14-22&deg;C</b>, mornings and nights <b>3-10&deg;C</b>, cool wind. Light rain possible around <b>Oct 25-26 and Oct 30-31</b>. Pack layers: shirts + <b>one sweater + one warm jacket</b>, small umbrella.</div>
+
+<div class="sticky">
+  <div class="meter"><div class="meter-top"><span class="meter-label">Checked bag</span><span class="meter-value" id="cv">3.5 / 22 kg</span></div><div class="bar"><div class="fill" id="cf" style="width:16%"></div></div><div class="mnote">Includes the empty suitcase at 3.5 kg. Everything ticked comes to about 18.5 kg. Estimates only - weigh the real bag.</div></div>
+  <div class="meter"><div class="meter-top"><span class="meter-label">Cabin bag</span><span class="meter-value" id="bv">0.0 / 7 kg</span></div><div class="bar"><div class="fill" id="bf" style="width:0%"></div></div></div>
+  <div class="prow"><span class="ptext" id="pt">0 of 56 ticked</span><button class="reset" id="reset">Reset ticks</button></div>
+</div>
+
+<h2>Documents &amp; money</h2><div class="bagnote">Cabin bag, within reach</div>
+<div data-s="d">
+<button class="item" data-id="passport"><span class="box"></span><span class="txt"><span class="name">Passport + visa approval printout</span></span></button>
+<button class="item" data-id="tickets"><span class="box"></span><span class="txt"><span class="name">Flight tickets</span><span class="detail">Printout or saved offline PDF</span></span></button>
+<button class="item" data-id="approval"><span class="box"></span><span class="txt"><span class="name">Company travel approval / letter</span></span></button>
+<button class="item" data-id="hotel"><span class="box"></span><span class="txt"><span class="name">Hotel booking confirmation</span></span></button>
+<button class="item" data-id="insurance"><span class="box"></span><span class="txt"><span class="name">Travel insurance paper</span></span></button>
+<button class="item" data-id="money"><span class="box"></span><span class="txt"><span class="name">Forex card + one credit/debit card + cash</span><span class="detail">RBI rule: foreign currency notes up to USD 3,000 per trip; the rest on a forex card. Korea: declare if total cash is over USD 10,000.</span></span></button>
+<button class="item" data-id="copies"><span class="box"></span><span class="txt"><span class="name">2 passport photocopies</span><span class="detail">Keep in a different bag from the passport</span></span></button>
+<button class="item" data-id="pen"><span class="box"></span><span class="txt"><span class="name">Pen</span><span class="detail">For the arrival and customs forms on the plane</span></span></button>
+</div>
+
+<h2>Electronics</h2><div class="bagnote">Cabin bag</div>
+<div data-s="e">
+<button class="item" data-id="adapter" data-kg="0.15" data-cabin="1"><span class="box"></span><span class="txt"><span class="name">Universal travel adapter &times; 1</span><span class="detail">Korea: 220V, round 2-pin sockets - Indian 3-pin plugs will not fit</span></span><span class="kg">~0.2 kg</span></button>
+<button class="item" data-id="phone" data-kg="0.3" data-cabin="1"><span class="box"></span><span class="txt"><span class="name">Phone + charger</span></span><span class="kg">~0.3 kg</span></button>
+<button class="item" data-id="laptop" data-kg="2.1" data-cabin="1"><span class="box"></span><span class="txt"><span class="name">Laptop + charger</span></span><span class="kg">~2.1 kg</span></button>
+<button class="item" data-id="powerbank" data-kg="0.25" data-cabin="1"><span class="box"></span><span class="txt"><span class="name">Power bank</span><span class="detail">Cabin bag only - never in the checked bag</span></span><span class="kg">~0.3 kg</span></button>
+<button class="item" data-id="earphones" data-kg="0.05" data-cabin="1"><span class="box"></span><span class="txt"><span class="name">Earphones</span></span><span class="kg">~0.1 kg</span></button>
+</div>
+<div class="warn"><b>Power bank flies in the cabin.</b> Airlines ban power banks and loose batteries in checked bags.</div>
+
+<h2>Phone setup</h2><div class="bagnote">Before you fly</div>
+<div data-s="p">
+<button class="item" data-id="esim"><span class="box"></span><span class="txt"><span class="name">Buy an eSIM or start international roaming</span><span class="detail">Nomad 10GB ~$18 or Ubigi ~$14; activate after landing</span></span></button>
+<button class="item" data-id="apps"><span class="box"></span><span class="txt"><span class="name">Install Naver Map, Papago, Kakao T</span><span class="detail">Maps, translation, taxi - Google Maps is weak in Korea</span></span></button>
+<button class="item" data-id="offline"><span class="box"></span><span class="txt"><span class="name">Save offline copies</span><span class="detail">Tickets, hotel address, office address (Seoul Square), Indian embassy address</span></span></button>
+<button class="item" data-id="checkin"><span class="box"></span><span class="txt"><span class="name">Online check-in</span><span class="detail">Opens 24-48 hours before the flight</span></span></button>
+<button class="item" data-id="earrival"><span class="box"></span><span class="txt"><span class="name">Fill the e-Arrival card online</span><span class="detail">Free at e-arrivalcard.go.kr, from 3 days before arrival - replaces the paper arrival card</span></span></button>
+</div>
+
+<h2>Entering South Korea</h2><div class="bagnote">Indian passport with a valid visa</div>
+<div class="facts">
+<div class="frow"><span class="flabel">K-ETA</span><span class="fval">Not needed - only for visa-free entry; you have a visa</span></div>
+<div class="frow"><span class="flabel">Q-Code</span><span class="fval">Not needed - only for designated quarantine areas or symptoms</span></div>
+<div class="frow"><span class="flabel">Cash limit</span><span class="fval">Declare at customs if carrying over USD 10,000 total</span></div>
+</div>
+
+<h2>Clothes</h2><div class="bagnote">Checked bag - about 9 nights, do laundry mid-trip</div>
+<div data-s="c">
+<button class="item" data-id="shirts" data-kg="1.3"><span class="box"></span><span class="txt"><span class="name">Formal shirts &times; 5</span><span class="detail">One per office day</span></span><span class="kg">~1.3 kg</span></button>
+<button class="item" data-id="trousers" data-kg="1.2"><span class="box"></span><span class="txt"><span class="name">Formal trousers &times; 2</span></span><span class="kg">~1.2 kg</span></button>
+<button class="item" data-id="jeans" data-kg="1.4"><span class="box"></span><span class="txt"><span class="name">Jeans &times; 2</span></span><span class="kg">~1.4 kg</span></button>
+<button class="item" data-id="tshirts" data-kg="0.6"><span class="box"></span><span class="txt"><span class="name">T-shirts / casual wear &times; 3</span></span><span class="kg">~0.6 kg</span></button>
+<button class="item" data-id="inners" data-kg="1.0"><span class="box"></span><span class="txt"><span class="name">Innerwear &times; 10 sets</span><span class="detail">One per day + 1 spare</span></span><span class="kg">~1.0 kg</span></button>
+<button class="item" data-id="socks" data-kg="0.6"><span class="box"></span><span class="txt"><span class="name">Socks &times; 10 pairs</span></span><span class="kg">~0.6 kg</span></button>
+<button class="item" data-id="nightwear" data-kg="0.5"><span class="box"></span><span class="txt"><span class="name">Nightwear &times; 2 sets + handkerchiefs &times; 4</span></span><span class="kg">~0.5 kg</span></button>
+<button class="item" data-id="sweater" data-kg="0.6"><span class="box"></span><span class="txt"><span class="name">Sweater or fleece &times; 1</span></span><span class="kg">~0.6 kg</span></button>
+<button class="item" data-id="jacket" data-kg="1.5"><span class="box"></span><span class="txt"><span class="name">Warm jacket &times; 1</span><span class="detail">Needed for 3-10&deg;C mornings</span></span><span class="kg">~1.5 kg</span></button>
+<button class="item" data-id="formalshoes" data-kg="1.4"><span class="box"></span><span class="txt"><span class="name">Formal shoes &times; 1 pair + belt</span></span><span class="kg">~1.4 kg</span></button>
+<button class="item" data-id="walkshoes"><span class="box"></span><span class="txt"><span class="name">Walking shoes &times; 1 pair</span><span class="detail">Wear these to the airport - not packed</span></span></button>
+<button class="item" data-id="umbrella" data-kg="0.4"><span class="box"></span><span class="txt"><span class="name">Small umbrella &times; 1</span><span class="detail">Rain possible Oct 25-26 and Oct 30-31</span></span><span class="kg">~0.4 kg</span></button>
+</div>
+
+<h2>Toiletries &amp; first aid</h2><div class="bagnote">Checked bag</div>
+<div data-s="t">
+<button class="item" data-id="toothbrush" data-kg="0.05"><span class="box"></span><span class="txt"><span class="name">Toothbrush &times; 1</span></span><span class="kg">0.05 kg</span></button>
+<button class="item" data-id="toothpaste" data-kg="0.1"><span class="box"></span><span class="txt"><span class="name">Toothpaste &times; 1 (small)</span></span><span class="kg">0.1 kg</span></button>
+<button class="item" data-id="facewash" data-kg="0.1"><span class="box"></span><span class="txt"><span class="name">Face wash &times; 1 (100 ml)</span></span><span class="kg">0.1 kg</span></button>
+<button class="item" data-id="razor" data-kg="0.2"><span class="box"></span><span class="txt"><span class="name">Razor &times; 1 + small shaving cream</span></span><span class="kg">0.2 kg</span></button>
+<button class="item" data-id="deodorant" data-kg="0.2"><span class="box"></span><span class="txt"><span class="name">Deodorant &times; 1 (150 ml)</span></span><span class="kg">0.2 kg</span></button>
+<button class="item" data-id="comb" data-kg="0.05"><span class="box"></span><span class="txt"><span class="name">Comb &times; 1</span></span><span class="kg">0.05 kg</span></button>
+<button class="item" data-id="soapshampoo" data-kg="0.3"><span class="box"></span><span class="txt"><span class="name">Small shampoo + soap</span><span class="detail">Optional - most hotels provide these</span></span><span class="kg">0.3 kg</span></button>
+<button class="item" data-id="nailcutter" data-kg="0.05"><span class="box"></span><span class="txt"><span class="name">Nail cutter &times; 1</span><span class="detail">Checked bag, not cabin</span></span><span class="kg">0.05 kg</span></button>
+<button class="item" data-id="firstaid" data-kg="0.3"><span class="box"></span><span class="txt"><span class="name">First-aid kit &times; 1</span><span class="detail">Paracetamol, ORS sachets &times; 4, antacid, band-aids, motion-sickness and cold tablets. Original packaging - Korea allows personal medicines (up to 6 bottles / 3 months' supply).</span></span><span class="kg">0.3 kg</span></button>
+</div>
+<div class="warn"><b>Cabin liquids rule.</b> Liquids, gels or pastes in the cabin bag must be 100 ml or less per bottle, all in one 1-litre clear zip bag. Bigger bottles go in the checked bag.</div>
+
+<h2>Snacks &amp; veg food</h2><div class="bagnote">Checked bag - sealed packets only</div>
+<div data-s="f">
+<button class="item" data-id="noodles" data-kg="0.3"><span class="box"></span><span class="txt"><span class="name">Instant noodles &times; 4 packs</span></span><span class="kg">~0.3 kg</span></button>
+<button class="item" data-id="poha" data-kg="0.6"><span class="box"></span><span class="txt"><span class="name">Poha / upma packs &times; 3</span></span><span class="kg">~0.6 kg</span></button>
+<button class="item" data-id="rice" data-kg="0.6"><span class="box"></span><span class="txt"><span class="name">Ready-to-eat rice mixes &times; 2</span></span><span class="kg">~0.6 kg</span></button>
+<button class="item" data-id="nuts" data-kg="0.5"><span class="box"></span><span class="txt"><span class="name">Nuts and dry fruits &times; 500 g</span></span><span class="kg">~0.5 kg</span></button>
+<button class="item" data-id="biscuits" data-kg="0.4"><span class="box"></span><span class="txt"><span class="name">Biscuits &times; 2 packs</span></span><span class="kg">~0.4 kg</span></button>
+<button class="item" data-id="tea" data-kg="0.2"><span class="box"></span><span class="txt"><span class="name">Tea / coffee sachets &times; 15</span></span><span class="kg">~0.2 kg</span></button>
+</div>
+<div class="warn"><b>Korea customs is strict.</b> Carry only factory-sealed veg packets and <b>declare food</b> on the customs form. When unsure, declare.</div>
+
+<h2>Do not pack</h2>
+<ul class="nox">
+<li>Power bank or loose batteries in the checked bag (cabin only)</li>
+<li>Liquids over 100 ml in the cabin bag</li>
+<li>Knife, scissors, or tools in the cabin bag</li>
+<li>Fresh fruits or vegetables, milk/dairy, ghee, milk powder, pickles, meat - customs will seize these</li>
+</ul>
+
+<h2>Transport card in Seoul</h2>
+<div class="facts">
+<div class="frow"><span class="flabel">Get first</span><span class="fval">T-money card - subway, bus, taxi, AREX all-stop train</span></div>
+<div class="frow"><span class="flabel">Where</span><span class="fval">Airport convenience store (CU/GS25, 24 h) or AREX station</span></div>
+<div class="frow"><span class="flabel">Cost</span><span class="fval">Card ~&#8361;3,000-5,000 + top-up in cash (KRW)</span></div>
+<div class="frow"><span class="flabel">Daily commute?</span><span class="fval">Climate Card 7-day pass &#8361;20,000 (+&#8361;3,000 card) - unlimited Seoul subway and bus</span></div>
+</div>
+<div class="warn"><b>Climate Card saves money if you ride 2+ times a day.</b> Buy and recharge at Seoul subway station machines (Seoul Station has them) - international credit/debit cards accepted for short-term passes. Not valid for boarding at Incheon airport, so get T-money first. Decide once the hotel is fixed.</div>
+
+<h2>On arrival in Seoul</h2><div class="bagnote">Incheon airport to the hotel</div>
+<div data-s="a">
+<button class="item" data-id="immig"><span class="box"></span><span class="txt"><span class="name">Clear immigration</span><span class="detail">Passport + visa; the e-Arrival card replaces the paper form</span></span></button>
+<button class="item" data-id="customsarrive"><span class="box"></span><span class="txt"><span class="name">Customs: green channel if nothing to declare</span><span class="detail">Declare food items and any goods over USD 800</span></span></button>
+<button class="item" data-id="esimactivate"><span class="box"></span><span class="txt"><span class="name">Activate eSIM / roaming</span></span></button>
+<button class="item" data-id="tmoneybuy"><span class="box"></span><span class="txt"><span class="name">Buy a T-money card</span><span class="detail">24-hour convenience store (CU/GS25) in arrivals, or the AREX station. Top up with cash (KRW).</span></span></button>
+<button class="item" data-id="arex"><span class="box"></span><span class="txt"><span class="name">AREX train to Seoul Station</span><span class="detail">Express: 43 min, &#8361;13,000, separate ticket (no T-money). All-stop: about 60 min, cheaper, T-money works. Seoul Square is next to Seoul Station.</span></span></button>
+<button class="item" data-id="hotelcheckin"><span class="box"></span><span class="txt"><span class="name">Hotel check-in</span><span class="detail">Passport + booking confirmation</span></span></button>
+<button class="item" data-id="cashwon"><span class="box"></span><span class="txt"><span class="name">Keep some KRW cash</span><span class="detail">Exchange a small amount at the airport or use an ATM; most shops take cards</span></span></button>
+</div>
+
+<h2>Help in Korea</h2>
+<div class="facts">
+<div class="frow"><span class="flabel">Emergency</span><span class="fval">112 police, 119 ambulance &amp; fire</span></div>
+<div class="frow"><span class="flabel">Indian Embassy Seoul</span><span class="fval">+82-2-798-4257</span></div>
+<div class="frow"><span class="flabel">Embassy address</span><span class="fval">101 Hannam-dong, Dokseodang-ro, Yongsan-gu, Seoul</span></div>
+</div>
+
+<h2>Coming back to India</h2>
+<div class="facts">
+<div class="frow"><span class="flabel">Duty-free allowance</span><span class="fval">&#8377;50,000 of new goods per person (Baggage Rules 2016)</span></div>
+<div class="frow"><span class="flabel">Above the limit</span><span class="fval">Dutiable - keep your shopping bills</span></div>
+</div>
+
+<h2>Weight plan - stay under 22 kg</h2>
+<table>
+<tr><th>Group</th><th>Weight (kg)</th></tr>
+<tr><td>Empty suitcase</td><td>3.5</td></tr>
+<tr><td>Clothes, jacket, formal shoes</td><td>10.5</td></tr>
+<tr><td>Toiletries + first aid</td><td>1.4</td></tr>
+<tr><td>Snacks and food packets</td><td>2.6</td></tr>
+<tr><td>Padlock, name tag, laundry bag</td><td>0.4</td></tr>
+<tr><td><b>Total (about 3.5 kg spare for shopping)</b></td><td><b>18.4</b></td></tr>
+</table>
+<div class="bagnote" style="margin-top:6px">Cabin bag: laptop 2.1 + power bank 0.25 + phone 0.3 + adapter 0.15 + earphones 0.05 = about 2.9 kg of 7 kg. Weigh both bags at home.</div>
+
+<h2>Last night before the flight</h2><div class="bagnote">Final checks</div>
+<div data-s="l">
+<button class="item" data-id="weigh"><span class="box"></span><span class="txt"><span class="name">Weigh both bags</span><span class="detail">Checked under 22 kg, cabin under 7 kg</span></span></button>
+<button class="item" data-id="docsready"><span class="box"></span><span class="txt"><span class="name">Passport, visa printout, tickets in the cabin bag</span></span></button>
+<button class="item" data-id="charge"><span class="box"></span><span class="txt"><span class="name">Charge phone and power bank fully</span></span></button>
+<button class="item" data-id="esimready"><span class="box"></span><span class="txt"><span class="name">eSIM bought / roaming switched on</span></span></button>
+<button class="item" data-id="checkedin"><span class="box"></span><span class="txt"><span class="name">Online check-in done, boarding pass saved</span></span></button>
+<button class="item" data-id="adaptercabin"><span class="box"></span><span class="txt"><span class="name">Adapter moved to the cabin bag</span><span class="detail">Needed at the airport and hotel</span></span></button>
+<button class="item" data-id="lock" data-kg="0.4"><span class="box"></span><span class="txt"><span class="name">Padlock, name tag and laundry bag packed</span></span><span class="kg">~0.4 kg</span></button>
+<button class="item" data-id="cab"><span class="box"></span><span class="txt"><span class="name">Cab to airport planned</span><span class="detail">Reach 3 hours before an international flight</span></span></button>
+</div>
+
+<div class="foot">Weather from the Korea Meteorological Administration forecast issued Oct 20, 2026 - recheck before leaving. Weights are estimates; weigh the packed bag at home. Official sources: e-arrivalcard.go.kr, k-eta.go.kr, kdca.go.kr, customs.go.kr, rbi.org.in, CBIC Baggage Rules 2016, airportrailroad.com, english.seoul.go.kr, fsi.mea.gov.in. Ticks are saved on this device only. Made Oct 20, 2026.</div>
+
+</div>
+<script>
+(function(){
+  var KEY='seoul-packing.v1', SUIT=3.5, CLIM=22, BLIM=7;
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  var items=[].slice.call(document.querySelectorAll('.item'));
+  function fmt(x){ return (Math.round(x*10)/10).toFixed(1); }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function render(){
+    var c=SUIT,b=0,n=0;
+    items.forEach(function(el){
+      var on=!!state[el.dataset.id];
+      el.classList.toggle('done',on);
+      el.setAttribute('aria-pressed',on?'true':'false');
+      el.querySelector('.box').textContent=on?'\u2713':'';
+      if(on){ n++; var k=parseFloat(el.dataset.kg||'0'); if(k){ if(el.dataset.cabin){ b+=k; } else { c+=k; } } }
+    });
+    var co=c>CLIM, bo=b>BLIM;
+    document.getElementById('cv').textContent=fmt(c)+' / '+CLIM+' kg'+(co?' - over limit':'');
+    document.getElementById('cv').className='meter-value'+(co?' over':'');
+    document.getElementById('cf').style.width=Math.min(100,c/CLIM*100)+'%';
+    document.getElementById('cf').className='fill'+(co?' over':'');
+    document.getElementById('bv').textContent=fmt(b)+' / '+BLIM+' kg'+(bo?' - over limit':'');
+    document.getElementById('bv').className='meter-value'+(bo?' over':'');
+    document.getElementById('bf').style.width=Math.min(100,b/BLIM*100)+'%';
+    document.getElementById('bf').className='fill'+(bo?' over':'');
+    document.getElementById('pt').textContent=n+' of '+items.length+' ticked';
+  }
+  items.forEach(function(el){ el.addEventListener('click',function(){ var id=el.dataset.id; state[id]=!state[id]; save(); render(); }); });
+  document.getElementById('reset').addEventListener('click',function(){ state={}; save(); render(); });
+  render();
+})();
+</script>
+</body></html>
