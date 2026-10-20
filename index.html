@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seoul Trip Packing Checklist</title>
+<title>Seoul Trip Companion</title>
 <style>
 :root { --ink:#251f21; --ink2:#585254; --hairline:#eae9ea; --teal:#73a89a; --red:#ed313e; --page:#ffffff; }
 * { box-sizing: border-box; }
@@ -46,12 +46,15 @@ th { background: #f4efec; }
 .frow { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--hairline); font-size: 14px; flex-wrap: wrap; }
 .flabel { color: var(--ink2); flex: 0 1 40%; }
 .fval { font-weight: 600; text-align: right; flex: 1 1 55%; }
+.fedit { display: block; width: 100%; border: 1px solid var(--hairline); border-radius: 8px; padding: 10px 12px; font: inherit; color: var(--ink); min-height: 44px; margin: 4px 0 10px; background: #fff; }
+.fedit::placeholder { color: #b6b1b2; }
+.elabel { display: block; font-size: 13px; color: var(--ink2); margin-top: 6px; }
 .foot { margin-top: 22px; font-size: 12px; color: var(--ink2); border-top: 1px solid var(--hairline); padding-top: 10px; }
 a { color: var(--ink); }
 </style></head>
 <body><div class="card">
 
-<h1>Seoul trip packing checklist</h1>
+<h1>Seoul trip companion</h1>
 <div class="sub">Business trip, Seoul &bull; office: Seoul Square, near Seoul Station &bull; Oct 23/24 - Nov 1 (about 9 nights) &bull; <b>1 checked bag max 22 kg + 1 cabin bag max 7 kg</b></div>
 
 <div class="weather"><b>Seoul weather</b> (Korea Meteorological Administration, issued Oct 20): days <b>14-22&deg;C</b>, mornings and nights <b>3-10&deg;C</b>, cool wind. Light rain possible around <b>Oct 25-26 and Oct 30-31</b>. Pack layers: shirts + <b>one sweater + one warm jacket</b>, small umbrella.</div>
@@ -61,6 +64,19 @@ a { color: var(--ink); }
   <div class="meter"><div class="meter-top"><span class="meter-label">Cabin bag</span><span class="meter-value" id="bv">0.0 / 7 kg</span></div><div class="bar"><div class="fill" id="bf" style="width:0%"></div></div></div>
   <div class="prow"><span class="ptext" id="pt">0 of 56 ticked</span><button class="reset" id="reset">Reset ticks</button></div>
 </div>
+
+
+<h2>My bookings</h2><div class="bagnote">Type once - saved on this phone, no login needed</div>
+<label class="elabel" for="b_flight">Flight to Seoul (date, airline, time)</label>
+<input class="fedit" id="b_flight" data-bid="flight" placeholder="e.g. Oct 23, Air India AI xxx, 4:45 PM via Delhi" autocomplete="off">
+<label class="elabel" for="b_hotel">Hotel name</label>
+<input class="fedit" id="b_hotel" data-bid="hotel" placeholder="e.g. hotel name once booked" autocomplete="off">
+<label class="elabel" for="b_hotelkr">Hotel address in Korean (show to taxi drivers)</label>
+<input class="fedit" id="b_hotelkr" data-bid="hotelkr" placeholder="paste the Korean address from the booking" autocomplete="off">
+<label class="elabel" for="b_contact">Office / local contact</label>
+<input class="fedit" id="b_contact" data-bid="contact" placeholder="e.g. manager name and Korean phone number" autocomplete="off">
+<label class="elabel" for="b_return">Return flight (Nov 1)</label>
+<input class="fedit" id="b_return" data-bid="return" placeholder="e.g. Nov 1, Air India, Incheon T1" autocomplete="off">
 
 <h2>Documents &amp; money</h2><div class="bagnote">Cabin bag, within reach</div>
 <div data-s="d">
@@ -158,6 +174,17 @@ a { color: var(--ink); }
 </div>
 <div class="warn"><b>Climate Card saves money if you ride 2+ times a day.</b> Buy and recharge at Seoul subway station machines (Seoul Station has them) - international credit/debit cards accepted for short-term passes. Not valid for boarding at Incheon airport, so get T-money first. Decide once the hotel is fixed.</div>
 
+
+<h2>Getting around Seoul</h2>
+<div class="facts">
+<div class="frow"><span class="flabel">Home base</span><span class="fval">Seoul Station - AREX airport train + subway Lines 1 and 4 meet here</span></div>
+<div class="frow"><span class="flabel">Office</span><span class="fval">Seoul Square, about a 5-minute walk from Seoul Station</span></div>
+<div class="frow"><span class="flabel">To Myeongdong</span><span class="fval">Line 4 from Seoul Station, 2 stops</span></div>
+<div class="frow"><span class="flabel">Subway fare</span><span class="fval">&#8361;1,550 per ride with T-money; transfers free if you tap out within 30 min</span></div>
+<div class="frow"><span class="flabel">Taxi</span><span class="fval">Base fare &#8361;4,800 daytime; book on the Kakao T app, show the address in Korean</span></div>
+<div class="frow"><span class="flabel">Directions</span><span class="fval">Naver Map or KakaoMap - Google Maps is weak in Korea</span></div>
+</div>
+
 <h2>On arrival in Seoul</h2><div class="bagnote">Incheon airport to the hotel</div>
 <div data-s="a">
 <button class="item" data-id="immig"><span class="box"></span><span class="txt"><span class="name">Clear immigration</span><span class="detail">Passport + visa; the e-Arrival card replaces the paper form</span></span></button>
@@ -189,6 +216,29 @@ a { color: var(--ink); }
 </div>
 
 
+
+<h2>Veg food in Seoul</h2><div class="bagnote">100% vegan restaurants - safest for strict veg</div>
+<div class="facts">
+<div class="frow"><span class="flabel">Vegan Kitchen, Myeongdong</span><span class="fval">100% vegan, 3 min from Myeongdong Stn - dolsot bibimbap, soy "chicken". Order at the table touch panel (English).</span></div>
+<div class="frow"><span class="flabel">Vegan Insa, Insadong</span><span class="fval">Vegan Korean in a traditional hanok house - tteokbokki, japchae, bibimbap. Busy at 6 pm.</span></div>
+<div class="frow"><span class="flabel">Osegye Hyang, Insadong</span><span class="fval">Long-running vegan spot; also has no onion-garlic dishes (temple style)</span></div>
+<div class="frow"><span class="flabel">Vegetus, Haebangchon</span><span class="fval">Western vegan near Itaewon - burgers, mac and cheese; English spoken</span></div>
+<div class="frow"><span class="flabel">Jyoti, Sinchon (Mapo-gu)</span><span class="fval">Indian - veg curries and thali, for a taste of home</span></div>
+</div>
+<div class="warn"><b>Careful with "vegetable" dishes.</b> Korean soups and kimchi usually use fish or meat stock even when they look veg. At normal restaurants, say "gogi bbaego juseyo" (no meat, please) - or stick to the vegan places above. Office-day lunches are covered by the food packets you packed.</div>
+
+<h2>Korean phrases</h2><div class="bagnote">Say it like the bracket</div>
+<div class="facts">
+<div class="frow"><span class="flabel">Hello</span><span class="fval">Annyeonghaseyo (an-nyeong-ha-se-yo)</span></div>
+<div class="frow"><span class="flabel">Thank you</span><span class="fval">Gamsahamnida (gam-sa-ham-ni-da)</span></div>
+<div class="frow"><span class="flabel">Excuse me</span><span class="fval">Jogiyo (jo-gi-yo)</span></div>
+<div class="frow"><span class="flabel">How much is this?</span><span class="fval">Igeo eolmayeyo? (ee-geo eol-ma-ye-yo)</span></div>
+<div class="frow"><span class="flabel">Do you speak English?</span><span class="fval">Yeong-eo haseyo? (yeong-eo ha-se-yo)</span></div>
+<div class="frow"><span class="flabel">Where is the toilet?</span><span class="fval">Hwajangsil eodiyeyo? (hwa-jang-sil eo-di-ye-yo)</span></div>
+<div class="frow"><span class="flabel">I cannot eat meat</span><span class="fval">Gogi mot meogeoyo (go-gi mot meo-geo-yo)</span></div>
+<div class="frow"><span class="flabel">No meat, please</span><span class="fval">Gogi bbaego juseyo (go-gi bbae-go ju-se-yo)</span></div>
+</div>
+
 <h2>Tax refund on shopping</h2><div class="bagnote">Korea refunds the tax tourists pay - claim it before flying home on Nov 1. Rules from Visit Korea (official).</div>
 <div data-s="r">
 <button class="item" data-id="tr_shop"><span class="box"></span><span class="txt"><span class="name">Shop only at stores with a "Tax Refund" / "Tax Free" sign</span><span class="detail">Minimum &#8361;15,000 per purchase. Show your passport at checkout and ask for the tax refund receipt. Goods must stay new and unused.</span></span></button>
@@ -203,6 +253,19 @@ a { color: var(--ink); }
 <div class="facts">
 <div class="frow"><span class="flabel">Duty-free allowance</span><span class="fval">&#8377;50,000 of new goods per person (Baggage Rules 2016)</span></div>
 <div class="frow"><span class="flabel">Above the limit</span><span class="fval">Dutiable - keep your shopping bills</span></div>
+</div>
+
+
+<h2>Flight days</h2><div class="bagnote">Departure morning (Oct 23/24) and the Nov 1 return</div>
+<div data-s="g">
+<button class="item" data-id="fd_leave"><span class="box"></span><span class="txt"><span class="name">Leave for Vizag airport 3 hours before the flight</span><span class="detail">International check-in closes 1 hour before</span></span></button>
+<button class="item" data-id="fd_docs"><span class="box"></span><span class="txt"><span class="name">Passport + visa printout in hand, not in the bag</span></span></button>
+<button class="item" data-id="fd_bag"><span class="box"></span><span class="txt"><span class="name">Bags weighed before leaving home</span><span class="detail">Checked under 22 kg, cabin under 7 kg</span></span></button>
+<button class="item" data-id="fd_pb"><span class="box"></span><span class="txt"><span class="name">Power bank in the cabin bag</span><span class="detail">Never in the checked bag</span></span></button>
+<button class="item" data-id="fr_leave"><span class="box"></span><span class="txt"><span class="name">Nov 1: leave the hotel about 4 hours before the flight</span></span></button>
+<button class="item" data-id="fr_arex"><span class="box"></span><span class="txt"><span class="name">AREX from Seoul Station to Incheon T1</span><span class="detail">Express 43 min, all-stop about 60 min</span></span></button>
+<button class="item" data-id="fr_refund"><span class="box"></span><span class="txt"><span class="name">Tax refund before checking the bag</span><span class="detail">Steps in the Tax refund section above</span></span></button>
+<button class="item" data-id="fr_gate"><span class="box"></span><span class="txt"><span class="name">After security: collect refund, buy last snacks, reach the gate 40 min early</span></span></button>
 </div>
 
 <h2>Weight plan - stay under 22 kg</h2>
@@ -229,7 +292,7 @@ a { color: var(--ink); }
 <button class="item" data-id="cab"><span class="box"></span><span class="txt"><span class="name">Cab to airport planned</span><span class="detail">Reach 3 hours before an international flight</span></span></button>
 </div>
 
-<div class="foot">Weather from the Korea Meteorological Administration forecast issued Oct 20, 2026 - recheck before leaving. Weights are estimates; weigh the packed bag at home. Official sources: e-arrivalcard.go.kr, k-eta.go.kr, kdca.go.kr, customs.go.kr, rbi.org.in, CBIC Baggage Rules 2016, airportrailroad.com, english.seoul.go.kr, fsi.mea.gov.in, english.visitkorea.or.kr (tax refund), royal.khs.go.kr (hanbok free entry). Ticks are saved on this device only. Made Oct 20, 2026.</div>
+<div class="foot">Weather from the Korea Meteorological Administration forecast issued Oct 20, 2026 - recheck before leaving. Weights are estimates; weigh the packed bag at home. Official sources: e-arrivalcard.go.kr, k-eta.go.kr, kdca.go.kr, customs.go.kr, rbi.org.in, CBIC Baggage Rules 2016, airportrailroad.com, english.seoul.go.kr, fsi.mea.gov.in, english.visitkorea.or.kr (tax refund), royal.khs.go.kr (hanbok free entry), english.seoul.go.kr (taxi fares), koreatimes.co.kr (subway fare, June 2025), spot-notes.com (vegan restaurants, Aug 2026). Ticks are saved on this device only. Made Oct 20, 2026.</div>
 
 </div>
 <script>
@@ -263,6 +326,15 @@ a { color: var(--ink); }
   items.forEach(function(el){ el.addEventListener('click',function(){ var id=el.dataset.id; state[id]=!state[id]; save(); render(); }); });
   document.getElementById('reset').addEventListener('click',function(){ state={}; save(); render(); });
   render();
+})();
+
+(function(){
+  var BKEY='seoul-bookings.v1', b={};
+  try{ b=JSON.parse(localStorage.getItem(BKEY)||'{}')||{}; }catch(e){ b={}; }
+  [].slice.call(document.querySelectorAll('.fedit')).forEach(function(el){
+    var id=el.dataset.bid; if(b[id]) el.value=b[id];
+    el.addEventListener('input',function(){ b[id]=el.value; try{ localStorage.setItem(BKEY, JSON.stringify(b)); }catch(e){} });
+  });
 })();
 </script>
 </body></html>
