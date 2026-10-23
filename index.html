@@ -154,6 +154,33 @@ h3{font-size:17px;margin:18px 0 2px;color:var(--teal)}
 <input class="fedit" id="b_return" data-bid="return" placeholder="e.g. Nov 1, Air India, Incheon T1" autocomplete="off">
 
 
+<h3>Expenses</h3>
+<div class="bagnote">Photos sent on WhatsApp. Card numbers, barcodes and payment reference numbers are blacked out.</div>
+<div class="day"><h3>Oct 23 - Nov 1 - Hotel, 9 nights - &#8377;102,893.89</h3><p><b>Stay:</b> Sinchon Number 25 (Sinchon branch), Standard Premium queen. Booked on Trip.com, paid by Visa.</p><a href="hotel-ereceipt-2026-10-23-redacted.jpg"><img src="hotel-ereceipt-2026-10-23-redacted.jpg" alt="Trip.com e-receipt, booking number and guest details blacked out" style="width:100%;border-radius:12px"></a><p><a href="hotel-ereceipt-2026-10-23-redacted.jpg" download>Download receipt</a> (booking number and personal details blacked out; original kept private for reimbursement)</p></div>
+
+<div class="day"><h3>Oct 23 - Airport bus to hotel - &#8361;17,000</h3><p><b>Travel:</b> Bus 6002, Incheon Airport T1 to Sinchon Station, 7:46 pm.</p><a href="2026-10-23-airport-bus-6002.jpg"><img src="2026-10-23-airport-bus-6002.jpg" alt="Airport bus ticket and receipt photo, card details blacked out" style="width:100%;border-radius:12px"></a><p><a href="2026-10-23-airport-bus-6002.jpg" download>Download receipt</a></p></div>
+<div class="ph"><span>Total so far</span><span>&#8377;102,893.89 + &#8361;17,000</span></div>
+<button class="reset" id="dl-exp" style="margin-top:10px">Download expenses (CSV)</button>
+<script>
+(function(){
+  // Keep in sync with the entries above: date, item, amount in KRW.
+  var EXPENSES=[
+    {d:'2026-10-23', item:'Hotel Sinchon Number 25 (Sinchon branch), Oct 23 - Nov 1, 9 nights, Trip.com', cur:'INR', amt:102893.89},
+    {d:'2026-10-23', item:'Airport bus 6002, Incheon Airport T1 to Sinchon Station', cur:'KRW', amt:17000}
+  ];
+  document.getElementById('dl-exp').addEventListener('click',function(){
+    var rows=[['Date','Item','Currency','Amount']];
+    var tots={};
+    EXPENSES.forEach(function(e){ rows.push([e.d,e.item,e.cur,e.amt]); tots[e.cur]=(tots[e.cur]||0)+e.amt; });
+    Object.keys(tots).forEach(function(c){ rows.push(['','Total',c,tots[c]]); });
+    var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');
+    var blob=new Blob(['\ufeff'+csv],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='korea-trip-expenses.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+})();
+</script>
+
 <h3>Handy words</h3>
 <div class="ph"><span>Hello</span><span>Annyeonghaseyo</span></div><div class="ph"><span>Thank you</span><span>Gamsahamnida</span></div><div class="ph"><span>Excuse me</span><span>Jogiyo</span></div><div class="ph"><span>How much?</span><span>Igeo eolmayeyo?</span></div><div class="ph"><span>English?</span><span>Yeong-eo haseyo?</span></div><div class="ph"><span>Toilet?</span><span>Hwajangsil eodiyeyo?</span></div><div class="ph"><span>I cannot eat meat</span><span>Gogi mot meogeoyo</span></div><div class="ph"><span>No meat, please</span><span>Gogi bbaego juseyo</span></div>
 <div class="lim">Emergency: <b>112</b> police, <b>119</b> ambulance. Indian Embassy Seoul: +82-2-798-4257. Taxi: book on Kakao T.</div>
