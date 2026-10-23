@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seoul Trip Companion</title>
+<style>
+:root { --ink:#251f21; --ink2:#585254; --hairline:#eae9ea; --teal:#73a89a; --red:#ed313e; --page:#ffffff; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; color: var(--ink); line-height: 1.4; margin: 0; background: #f4efec; }
+.card { max-width: 720px; margin: 0 auto; background: var(--page); padding: 20px 16px 32px; min-height: 100vh; }
+h1 { font-size: 24px; margin: 4px 0 4px; }
+.sub { color: var(--ink2); font-size: 14px; margin-bottom: 10px; }
+.weather { background: #f4efec; border-radius: 12px; padding: 10px 14px; font-size: 14px; margin-bottom: 14px; }
+h2 { font-size: 18px; margin: 22px 0 4px; border-bottom: 1px solid var(--hairline); padding-bottom: 6px; }
+.bagnote { color: var(--ink2); font-size: 13px; margin-bottom: 6px; }
+.warn { background: #f4efec; border-radius: 12px; padding: 10px 14px; font-size: 14px; margin: 8px 0; }
+.warn b { color: var(--ink); }
+.item { display: flex; align-items: flex-start; gap: 12px; width: 100%; min-height: 44px; padding: 10px 4px; background: none; border: none; border-bottom: 1px solid var(--hairline); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.box { flex: 0 0 22px; height: 22px; margin-top: 1px; border: 1.5px solid var(--ink); border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; line-height: 1; }
+.item.done .box { background: var(--teal); border-color: var(--teal); }
+.txt { flex: 1 1 auto; min-width: 0; }
+.name { display: block; font-weight: 600; }
+.item.done .name { text-decoration: line-through; color: var(--ink2); }
+.detail { display: block; margin-top: 2px; font-size: 13px; color: var(--ink2); }
+.kg { flex: 0 0 auto; font-size: 13px; font-weight: 600; color: var(--ink2); margin-top: 2px; }
+.sticky { position: sticky; top: 0; z-index: 5; background: var(--page); border: 1px solid var(--hairline); border-radius: 12px; padding: 12px 14px; margin: 12px 0 4px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.meter { margin-bottom: 10px; }
+.meter-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.meter-label { font-weight: 600; }
+.meter-value { font-weight: 600; color: var(--teal); }
+.meter-value.over { color: var(--red); }
+.bar { height: 8px; border-radius: 4px; background: var(--hairline); overflow: hidden; margin-top: 4px; }
+.fill { height: 100%; background: var(--teal); border-radius: 4px; transition: width .16s ease; }
+.fill.over { background: var(--red); }
+.mnote { margin-top: 4px; font-size: 12px; color: var(--ink2); }
+.prow { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ptext { color: var(--ink2); font-size: 13px; }
+.reset { background: none; border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink2); font: inherit; font-size: 13px; padding: 8px 12px; min-height: 44px; cursor: pointer; }
+ul.nox { margin: 4px 0; padding-left: 4px; list-style: none; }
+ul.nox li { margin: 6px 0; }
+ul.nox li::before { content: "\2717\00a0\00a0"; color: var(--red); font-weight: 700; }
+table { border-collapse: collapse; width: 100%; margin-top: 6px; font-size: 14px; }
+th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+th { background: #f4efec; }
+.facts { margin: 4px 0; }
+.frow { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--hairline); font-size: 14px; flex-wrap: wrap; }
+.flabel { color: var(--ink2); flex: 0 1 40%; }
+.fval { font-weight: 600; text-align: right; flex: 1 1 55%; }
+.fedit { display: block; width: 100%; border: 1px solid var(--hairline); border-radius: 8px; padding: 10px 12px; font: inherit; color: var(--ink); min-height: 44px; margin: 4px 0 10px; background: #fff; }
+.fedit::placeholder { color: #b6b1b2; }
+.elabel { display: block; font-size: 13px; color: var(--ink2); margin-top: 6px; }
+.foot { margin-top: 22px; font-size: 12px; color: var(--ink2); border-top: 1px solid var(--hairline); padding-top: 10px; }
+a { color: var(--ink); }
+
+body{font-size:17px}
+h1{font-size:26px}
+.tabs{position:sticky;top:0;z-index:9;display:flex;gap:8px;background:#fff;padding:10px 0;margin:8px 0 6px;border-bottom:1px solid var(--hairline)}
+.tab{flex:1;min-height:52px;border:2px solid var(--teal);border-radius:12px;background:#fff;font:inherit;font-weight:700;font-size:16px;color:var(--ink);cursor:pointer;padding:6px 4px}
+.tab.on{background:var(--teal);color:#fff}
+.part{display:none}.part.on{display:block}
+h2{font-size:20px}
+h3{font-size:17px;margin:18px 0 2px;color:var(--teal)}
+.day{border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;margin:12px 0;background:#fff}
+.day h3{margin:0 0 6px;color:var(--ink)}
+.day p{margin:6px 0;font-size:16px}
+.day b{color:var(--teal)}
+.item{font-size:17px}
+.name{font-weight:600}
+.detail{font-size:14px}
+.lim{background:#f4efec;border-radius:12px;padding:10px 14px;margin:8px 0;font-size:15px}
+.buy{display:inline-block;background:#fde8e8;color:#b91c1c;font-size:11px;font-weight:600;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+.ph{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--hairline);font-size:15px}
+.ph span:first-child{color:var(--ink2)}
+.ph span:last-child{font-weight:600;text-align:right}
+</style></head>
+<body><div class="card">
+<h1>Seoul trip</h1>
+<div class="sub">Business trip, office at Seoul Square (next to Seoul Station). 1 checked bag max 22 kg + 1 cabin bag max 7 kg.</div>
+<div class="tabs"><button class="tab on" data-p="before">BEFORE</button><button class="tab" data-p="korea">IN KOREA</button><button class="tab" data-p="after">AFTER</button></div>
+<div class="ptext" id="pt" style="margin:4px 0"></div>
+
+<div class="part on" id="p-before">
+<h2>Before the trip</h2>
+<h3>Documents (cabin bag)</h3>
+<button class="item" data-id="passport"><span class="box"></span><span class="txt"><span class="name">Passport + visa approval printout</span></span></button>
+<button class="item" data-id="tickets"><span class="box"></span><span class="txt"><span class="name">Flight tickets</span><span class="detail">Printout or saved offline PDF</span></span></button>
+<button class="item" data-id="papers"><span class="box"></span><span class="txt"><span class="name">Papers: company letter, hotel booking, insurance, 2 passport photocopies, pen</span><span class="detail">Keep photocopies in a different bag from the passport</span></span></button>
+<button class="item" data-id="money"><span class="box"></span><span class="txt"><span class="name">Forex card + one credit/debit card + some cash</span><span class="detail">Declare at Korean customs if cash is over USD 10,000</span></span></button>
+<h3>Checked bag (max 22 kg)</h3>
+<button class="item" data-id="clothes"><span class="box"></span><span class="txt"><span class="name">Clothes for 9 days</span><span class="detail">5 formal shirts, 2 trousers, 2 jeans, 3 T-shirts, 4 innerwear, 10 socks, nightwear</span></span></button>
+<button class="item" data-id="warm"><span class="box"></span><span class="txt"><span class="name">Sweater, warm jacket, small umbrella</span><span class="detail">Mornings are 3-10&deg;C, rain possible Oct 25-26 and Oct 30-31</span></span></button>
+<button class="item" data-id="shoes"><span class="box"></span><span class="txt"><span class="name">Formal shoes + belt. Wear walking shoes on the flight</span></span></button>
+<button class="item" data-id="toiletries"><span class="box"></span><span class="txt"><span class="name">Toiletries</span><span class="detail">Brush, paste, face wash, razor, deodorant, comb, nail cutter</span></span></button>
+<button class="item" data-id="firstaid"><span class="box"></span><span class="txt"><span class="name">First-aid kit and your medicines</span><span class="detail">Original packaging</span></span></button>
+<button class="item" data-id="snacks"><span class="box"></span><span class="txt"><span class="name">Sealed veg food packets</span><span class="detail">Noodles, poha/upma, rice mixes, nuts, biscuits, tea. Factory-sealed only</span></span></button>
+<button class="item" data-id="lock"><span class="box"></span><span class="txt"><span class="name">Padlock, name tag, laundry bag</span></span></button>
+<h3>My packing list</h3>
+<div class="bagnote">Rakesh's own list, added Oct 21</div>
+<button class="item" data-id="mypack_brush"><span class="box"></span><span class="txt"><span class="name">Tooth brush and paste</span></span></button>
+<button class="item" data-id="mypack_toothpaste"><span class="box"></span><span class="txt"><span class="name">Toothpaste</span></span></button>
+<button class="item" data-id="mypack_soap"><span class="box"></span><span class="txt"><span class="name">Soap</span></span></button>
+<button class="item" data-id="mypack_shampoo"><span class="box"></span><span class="txt"><span class="name">Shampoo</span></span></button>
+<button class="item" data-id="mypack_facewash"><span class="box"></span><span class="txt"><span class="name">Face wash</span></span></button>
+<button class="item" data-id="mypack_sunscreen"><span class="box"></span><span class="txt"><span class="name">Sunscreen</span></span></button>
+<button class="item" data-id="mypack_brush2"><span class="box"></span><span class="txt"><span class="name">Brush</span></span></button>
+<button class="item" data-id="mypack_comb"><span class="box"></span><span class="txt"><span class="name">Comb</span></span></button>
+<button class="item" data-id="mypack_towel"><span class="box"></span><span class="txt"><span class="name">Towel</span></span></button>
+<button class="item" data-id="mypack_clothes"><span class="box"></span><span class="txt"><span class="name">Shirts / pants / T-shirts / nightwear</span></span></button>
+<button class="item" data-id="mypack_innerwear"><span class="box"></span><span class="txt"><span class="name">Inner wear - 4 pairs</span></span></button>
+<button class="item" data-id="mypack_socks"><span class="box"></span><span class="txt"><span class="name">Socks</span></span></button>
+<button class="item" data-id="mypack_sweater"><span class="box"></span><span class="txt"><span class="name">Sweater</span></span></button>
+<button class="item" data-id="mypack_gloves"><span class="box"></span><span class="txt"><span class="name">Gloves</span></span></button>
+<button class="item" data-id="mypack_shoes"><span class="box"></span><span class="txt"><span class="name">Shoes</span></span></button>
+<button class="item" data-id="mypack_belt"><span class="box"></span><span class="txt"><span class="name">Belt</span></span></button>
+<button class="item" data-id="mypack_medicines"><span class="box"></span><span class="txt"><span class="name">Medicines</span></span></button>
+<button class="item" data-id="mypack_tablets"><span class="box"></span><span class="txt"><span class="name">Tablets</span></span></button>
+<button class="item" data-id="mypack_snacks"><span class="box"></span><span class="txt"><span class="name">Snacks and biscuits</span></span></button>
+<button class="item" data-id="mypack_wallet"><span class="box"></span><span class="txt"><span class="name">Wallet</span></span></button>
+<button class="item" data-id="mypack_cables"><span class="box"></span><span class="txt"><span class="name">Cables (USB) <span class="buy">Need to buy</span></span></span></button>
+<button class="item" data-id="mypack_headset"><span class="box"></span><span class="txt"><span class="name">Headset</span></span></button>
+<button class="item" data-id="mypack_pump"><span class="box"></span><span class="txt"><span class="name">Pump</span></span></button>
+<button class="item" data-id="mypack_bottle"><span class="box"></span><span class="txt"><span class="name">Water bottle</span></span></button>
+<h3>Cabin bag (max 7 kg)</h3>
+<button class="item" data-id="adapter"><span class="box"></span><span class="txt"><span class="name">Universal travel adapter <span class="buy">Need to buy</span></span><span class="detail">Korea has round 2-pin sockets. Indian plugs will not fit</span></span></button>
+<button class="item" data-id="gadgets"><span class="box"></span><span class="txt"><span class="name">Phone, laptop, earphones + chargers</span></span></button>
+<button class="item" data-id="powerbank"><span class="box"></span><span class="txt"><span class="name">Power banks (max 2)</span><span class="detail">Capacity check pending. Cabin bag only, within reach - not overhead. No in-flight use or charging</span></span></button>
+<h3>Phone</h3>
+<button class="item" data-id="esim"><span class="box"></span><span class="txt"><span class="name">Buy an eSIM or start roaming</span></span></button>
+<button class="item" data-id="apps"><span class="box"></span><span class="txt"><span class="name">Install Naver Map, Papago, Kakao T</span><span class="detail">Google Maps is weak in Korea</span></span></button>
+<button class="item" data-id="offline"><span class="box"></span><span class="txt"><span class="name">Save offline: tickets, hotel address, office address</span></span></button>
+<h3>Day before the flight</h3>
+<button class="item" data-id="checkin"><span class="box"></span><span class="txt"><span class="name">Online check-in, boarding pass saved</span><span class="detail">Opens 24-48 hours before the flight</span></span></button>
+<button class="item" data-id="earrival"><span class="box"></span><span class="txt"><span class="name">Fill the e-Arrival card online</span><span class="detail">Free at e-arrivalcard.go.kr, from 3 days before arrival</span></span></button>
+<button class="item" data-id="weigh"><span class="box"></span><span class="txt"><span class="name">Weigh both bags</span><span class="detail">Checked under 22 kg, cabin under 7 kg</span></span></button>
+<button class="item" data-id="cab"><span class="box"></span><span class="txt"><span class="name">Cab to the airport planned</span></span></button>
+<h3>Flight morning</h3>
+<button class="item" data-id="fd_leave"><span class="box"></span><span class="txt"><span class="name">Leave for Vizag airport 3 hours before the flight</span></span></button>
+<button class="item" data-id="fd_docs"><span class="box"></span><span class="txt"><span class="name">Passport + visa printout in hand</span></span></button>
+</div>
+
+<div class="part" id="p-korea">
+<h2>In Korea</h2>
+<div class="lim"><b>Weather:</b> days 14-22&deg;C, mornings and nights 3-10&deg;C. Wear layers.</div>
+<h3>My bookings</h3><div class="bagnote">Type once - saved on this phone, no login needed</div>
+<label class="elabel" for="b_flight">Flight to Seoul (date, airline, time)</label>
+<input class="fedit" id="b_flight" data-bid="flight" placeholder="e.g. Oct 23, Air India AI xxx, 4:45 PM via Delhi" autocomplete="off">
+<label class="elabel" for="b_hotel">Hotel name</label>
+<input class="fedit" id="b_hotel" data-bid="hotel" placeholder="e.g. hotel name once booked" autocomplete="off">
+<label class="elabel" for="b_hotelkr">Hotel address in Korean (show to taxi drivers)</label>
+<input class="fedit" id="b_hotelkr" data-bid="hotelkr" placeholder="paste the Korean address from the booking" autocomplete="off">
+<label class="elabel" for="b_contact">Office / local contact</label>
+<input class="fedit" id="b_contact" data-bid="contact" placeholder="e.g. manager name and Korean phone number" autocomplete="off">
+<label class="elabel" for="b_return">Return flight (Nov 1)</label>
+<input class="fedit" id="b_return" data-bid="return" placeholder="e.g. Nov 1, Air India, Incheon T1" autocomplete="off">
+
+
+<h3>Handy words</h3>
+<div class="ph"><span>Hello</span><span>Annyeonghaseyo</span></div><div class="ph"><span>Thank you</span><span>Gamsahamnida</span></div><div class="ph"><span>Excuse me</span><span>Jogiyo</span></div><div class="ph"><span>How much?</span><span>Igeo eolmayeyo?</span></div><div class="ph"><span>English?</span><span>Yeong-eo haseyo?</span></div><div class="ph"><span>Toilet?</span><span>Hwajangsil eodiyeyo?</span></div><div class="ph"><span>I cannot eat meat</span><span>Gogi mot meogeoyo</span></div><div class="ph"><span>No meat, please</span><span>Gogi bbaego juseyo</span></div>
+<div class="lim">Emergency: <b>112</b> police, <b>119</b> ambulance. Indian Embassy Seoul: +82-2-798-4257. Taxi: book on Kakao T.</div>
+<h3>Day by day</h3>
+<div class="bagnote">Day 1 is the day you land (about Oct 24). Days 2 and 8 are free days if you land on Oct 24.</div>
+<div class="day"><h3>Day 1 - Land in Seoul</h3><p><b>Do:</b> Immigration, then get your bags. Settle in at the hotel.</p><p><b>Eat:</b> Packed noodles or poha tonight, or Vegan Kitchen in Myeongdong if you have energy.</p><p><b>Travel:</b> AREX train to Seoul Station: express 43 min (13,000 won) or all-stop about 60 min. Hotel by taxi or walk with Naver Map.</p><button class="item" data-id="immig"><span class="box"></span><span class="txt"><span class="name">Immigration: passport + visa. Customs: declare food if unsure</span></span></button>
+<button class="item" data-id="esimactivate"><span class="box"></span><span class="txt"><span class="name">Switch on eSIM / roaming</span></span></button>
+<button class="item" data-id="tmoneybuy"><span class="box"></span><span class="txt"><span class="name">Buy a T-money card</span><span class="detail">Convenience store (CU/GS25) in arrivals. Top up with cash</span></span></button>
+<button class="item" data-id="arex"><span class="box"></span><span class="txt"><span class="name">AREX train to Seoul Station</span></span></button>
+<button class="item" data-id="hotelcheckin"><span class="box"></span><span class="txt"><span class="name">Hotel check-in</span><span class="detail">Passport + booking confirmation. Keep some won cash</span></span></button></div><div class="day"><h3>Day 2 - Free day</h3><p><b>Do:</b> Gyeongbokgung Palace (free entry if you wear a hanbok), then walk to Insadong street.</p><p><b>Eat:</b> Vegan Insa (Insadong, in a hanok house) or Osegye Hyang (Insadong, no onion or garlic).</p><p><b>Travel:</b> Subway or Kakao T taxi. Show the address in Korean.</p></div><div class="day"><h3>Day 3 - First office day</h3><p><b>Do:</b> Walk to Seoul Square for work, about 5 minutes from Seoul Station.</p><p><b>Eat:</b> Packed food for lunch. Dinner: Vegan Kitchen, Myeongdong (Line 4, 2 stops from Seoul Station).</p><p><b>Travel:</b> Subway is 1,550 won with T-money.</p></div><div class="day"><h3>Day 4 - Office</h3><p><b>Do:</b> Work. Evening walk at Cheonggyecheon Stream, lit up and free, near Seoul Square.</p><p><b>Eat:</b> Packed lunch. Careful: soups and kimchi often use fish or meat stock.</p><p><b>Travel:</b> Walk. Everything is near Seoul Station.</p></div><div class="day"><h3>Day 5 - Office</h3><p><b>Do:</b> Work. Evening at Namdaemun Market, a walk from Seoul Station. Do laundry mid-trip.</p><p><b>Eat:</b> Dinner: Jyoti in Sinchon for Indian veg curries and thali.</p><p><b>Travel:</b> Subway or Kakao T taxi. Check Naver Map.</p></div><div class="day"><h3>Day 6 - Office</h3><p><b>Do:</b> Work. Evening shopping in Myeongdong. Ask for a tax refund receipt on purchases over 15,000 won.</p><p><b>Eat:</b> Dinner: Vegan Kitchen, Myeongdong.</p><p><b>Travel:</b> Line 4 from Seoul Station, 2 stops. Keep every refund receipt.</p></div><div class="day"><h3>Day 7 - Office</h3><p><b>Do:</b> Work. Sunset at N Seoul Tower, cable car from the Myeongdong side.</p><p><b>Eat:</b> Dinner: Vegetus in Haebangchon (vegan burgers, English spoken).</p><p><b>Travel:</b> Subway or Kakao T taxi.</p></div><div class="day"><h3>Day 8 - Free day</h3><p><b>Do:</b> Bukchon Hanok Village (go before 6 pm). Last shopping. Pack the bags, weigh them.</p><p><b>Eat:</b> Osegye Hyang or Vegan Insa in Insadong.</p><p><b>Travel:</b> Subway or Kakao T taxi.</p></div><div class="day"><h3>Day 9 - Fly home (Nov 1)</h3><p><b>Do:</b> See the AFTER button.</p><p><b>Eat:</b> Leave time for breakfast at the hotel.</p><p><b>Travel:</b> Leave the hotel about 4 hours before the flight.</p></div></div>
+
+<div class="part" id="p-after">
+<h2>After - fly home</h2>
+<div class="lim">Shortcut: many shops and downtown booths give the tax refund on the spot. Then nothing to do at the airport.</div>
+<button class="item" data-id="fr_leave"><span class="box"></span><span class="txt"><span class="name">Leave the hotel about 4 hours before the flight</span></span></button>
+<button class="item" data-id="fr_arex"><span class="box"></span><span class="txt"><span class="name">AREX from Seoul Station to Incheon T1</span><span class="detail">Express 43 min, all-stop about 60 min</span></span></button>
+<button class="item" data-id="tr_boarding"><span class="box"></span><span class="txt"><span class="name">Check in, get the boarding pass. Keep the shopping bag with you</span><span class="detail">Do not check the bag yet. Customs may want to see the goods</span></span></button>
+<button class="item" data-id="tr_customs"><span class="box"></span><span class="txt"><span class="name">Show goods + receipts at the customs desk for the stamp</span><span class="detail">Then check the bag at the oversized-baggage counter</span></span></button>
+<button class="item" data-id="tr_collect"><span class="box"></span><span class="txt"><span class="name">After security: collect the tax refund</span><span class="detail">Refund counter or kiosk near Gate 28 (T1), cash or card</span></span></button>
+<button class="item" data-id="fr_gate"><span class="box"></span><span class="txt"><span class="name">Reach the gate 40 minutes early</span></span></button>
+<h3>Back in India</h3>
+<div class="lim">New goods up to <b>Rs 50,000</b> per person are duty-free. Above that, duty applies. Keep your shopping bills.</div>
+</div>
+
+<div class="foot"><button class="reset" id="reset">Reset ticks</button><br><br><a href="index-full-backup.html">Old full detailed version</a></div>
+</div>
+<script>
+(function(){
+  var KEY='seoul-packing.v1';
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  var items=[].slice.call(document.querySelectorAll('.item'));
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function render(){
+    var n=0;
+    items.forEach(function(el){
+      var on=!!state[el.dataset.id];
+      el.classList.toggle('done',on);
+      el.setAttribute('aria-pressed',on?'true':'false');
+      el.querySelector('.box').textContent=on?'\u2713':'';
+      if(on) n++;
+    });
+    document.getElementById('pt').textContent=n+' of '+items.length+' ticked';
+  }
+  items.forEach(function(el){ el.addEventListener('click',function(){ var id=el.dataset.id; state[id]=!state[id]; save(); render(); }); });
+  document.getElementById('reset').addEventListener('click',function(){ if(confirm('Clear all ticks?')){ state={}; save(); render(); } });
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(p){
+    tabs.forEach(function(t){ t.classList.toggle('on',t.dataset.p===p); });
+    ['before','korea','after'].forEach(function(x){ document.getElementById('p-'+x).classList.toggle('on',x===p); });
+    try{ localStorage.setItem('seoul-tab.v1',p); }catch(e){}
+    window.scrollTo(0,0);
+  }
+  tabs.forEach(function(t){ t.addEventListener('click',function(){ show(t.dataset.p); }); });
+  var last='before'; try{ last=localStorage.getItem('seoul-tab.v1')||'before'; }catch(e){}
+  if(['before','korea','after'].indexOf(last)<0) last='before';
+  show(last); window.scrollTo(0,0);
+  render();
+})();
+
+(function(){
+  var BKEY='seoul-bookings.v1', b={};
+  try{ b=JSON.parse(localStorage.getItem(BKEY)||'{}')||{}; }catch(e){ b={}; }
+  [].slice.call(document.querySelectorAll('.fedit')).forEach(function(el){
+    var id=el.dataset.bid; if(b[id]) el.value=b[id];
+    el.addEventListener('input',function(){ b[id]=el.value; try{ localStorage.setItem(BKEY, JSON.stringify(b)); }catch(e){} });
+  });
+})();
+</script>
+</body></html>
