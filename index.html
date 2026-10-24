@@ -253,6 +253,17 @@ h3{font-size:17px;margin:18px 0 2px;color:var(--teal)}
   var last='before'; try{ last=localStorage.getItem('seoul-tab.v1')||'before'; }catch(e){}
   if(['before','korea','after'].indexOf(last)<0) last='before';
   show(last); window.scrollTo(0,0);
+  if(location.hash==='#expenses'||location.hash==='#tracker'){
+    show('korea');
+    var go=function(){
+      var hs=[].slice.call(document.querySelectorAll('h3'));
+      for(var i=0;i<hs.length;i++){
+        var t=hs[i].textContent.trim();
+        if(t==='Expenses'||t==='Trip money'){ hs[i].scrollIntoView(); break; }
+      }
+    };
+    setTimeout(go,60); setTimeout(go,450); setTimeout(go,1200); setTimeout(go,2500);
+  }
   render();
 })();
 
