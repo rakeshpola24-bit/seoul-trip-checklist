@@ -127,8 +127,9 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
   var ALLOC_START='2026-10-23', ALLOC_END='2026-11-01', HOTEL_DAILY=10289.39, HOTEL_FIRST=10289.38;
   var DAY1='2026-10-22';
   function dayLabel(d){
-    if(d===DAY1) return 'Day 1 \u00B7 10/22 \u00B7 travel day';
-    return d.slice(5).replace('-','/');
+    if(d===ALLOC_START) return 'Day 1 \u00B7 10/22-23';
+    var n=(Date.parse(d)-Date.parse(ALLOC_START))/86400000+1;
+    return 'Day '+n+' \u00B7 '+d.slice(5).replace('-','/');
   }
 
   function renderDays(){
@@ -138,8 +139,9 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     all.forEach(function(e){ if(!e.alloc && days.indexOf(e.d)<0) days.push(e.d); });
     days.sort();
     var h='';
+    days=days.filter(function(d){return d!==DAY1;});
     days.forEach(function(day){
-      var rows=all.filter(function(e){return e.d===day && !e.alloc;});
+      var rows=all.filter(function(e){return (e.d===day || (day===ALLOC_START && e.d===DAY1)) && !e.alloc;});
       var sums={reimb:0,food:0,fees:0,ent:0}, est={reimb:false,food:false,fees:false,ent:false};
       var owed={reimb:false,food:false,fees:false,ent:false};
       rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; sums[g]+=r.v; if(r.est) est[g]=true; if(e.owed) owed[g]=true; });
