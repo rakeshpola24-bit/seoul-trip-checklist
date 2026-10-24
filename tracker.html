@@ -131,9 +131,10 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
       var sums={reimb:0,food:0,fees:0,ent:0}, est={reimb:false,food:false,fees:false,ent:false};
       var owed={reimb:false,food:false,fees:false,ent:false};
       rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; sums[g]+=r.v; if(r.est) est[g]=true; if(e.owed) owed[g]=true; });
-      if(day>=ALLOC_START && day<=ALLOC_END) sums.reimb+=(day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY);
+      var hotelAmt=(day>=ALLOC_START && day<=ALLOC_END)?(day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY):0;
       h+='<div class="daybox"><h3>'+dayLabel(day)+'</h3>';
-      if(sums.reimb>0) h+='<div class="dline"><span>Hotel + Transport</span><span>'+(est.reimb?'~':'')+'\u20B9'+fmt(sums.reimb.toFixed(2))+usdBracket(sums.reimb)+'</span></div>';
+      if(hotelAmt>0) h+='<div class="dline"><span>Hotel</span><span>\u20B9'+fmt(hotelAmt.toFixed(2))+usdBracket(hotelAmt)+'</span></div>';
+      if(sums.reimb>0) h+='<div class="dline"><span>Transport</span><span>'+(est.reimb?'~':'')+'\u20B9'+fmt(sums.reimb.toFixed(2))+usdBracket(sums.reimb)+'</span></div>';
       if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+(est.food?'~':'')+'\u20B9'+fmt(sums.food.toFixed(2))+usdBracket(sums.food)+'</span></div>';
       if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+(est.fees?'~':'')+'\u20B9'+fmt(sums.fees.toFixed(2))+usdBracket(sums.fees)+'</span></div>';
       if(sums.ent>0) h+='<div class="dline"><span>Entertainment'+(owed.ent?' (owed, not paid)':'')+'</span><span>'+(est.ent?'~':'')+'\u20B9'+fmt(sums.ent.toFixed(2))+usdBracket(sums.ent)+'</span></div>';
