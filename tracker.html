@@ -56,7 +56,7 @@ table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4
 
 <h2>All entries</h2>
 <div id="detailwrap"></div>
-<div class="small">"~&#8377;" = estimated rupees at Oct 23 rates (1 US$ = &#8377;94.94 = &#8361;1,324.45); the rest are actual ICICI card charges (unbilled ones can shift slightly when they post). The ATM fee's rupee share (&#8377;301.95) is our calculated split of the &#8377;1,020.87 card charge, not bank-itemized. &#8361;10,000 cash withdrawn Oct 24 is not spending - it funded the &#8361;10,000 top-up; only the &#8361;4,200 ATM fee counts. Hotel &#8377;102,893.89 was paid once on Oct 22 for the whole 9-night stay (check-in Oct 23, check-out Nov 1); the day boxes spread it across the 9 nights (&#8377;11,432.65/night, first night &#8377;11,432.69 including 4-paisa rounding) per your instruction. Lotteria was labeled Personal by you.</div>
+<div class="small">"~&#8377;" = estimated rupees at Oct 23 rates (1 US$ = &#8377;94.94 = &#8361;1,324.45); US$ in brackets are approximate at the same rate; the rest are actual ICICI card charges (unbilled ones can shift slightly when they post). The ATM fee's rupee share (&#8377;301.95) is our calculated split of the &#8377;1,020.87 card charge, not bank-itemized. &#8361;10,000 cash withdrawn Oct 24 is not spending - it funded the &#8361;10,000 top-up; only the &#8361;4,200 ATM fee counts. Hotel &#8377;102,893.89 was paid once on Oct 22 for the whole 9-night stay (check-in Oct 23, check-out Nov 1); the day boxes spread it across the 9 nights (&#8377;11,432.65/night, first night &#8377;11,432.69 including 4-paisa rounding) per your instruction. Lotteria was labeled Personal by you.</div>
 
 <h2>Add a receipt</h2>
 <div class="small" style="color:#777">Saved <b>only on this phone, in this browser</b> - not uploaded, lost if browser data is cleared. Use Download backup after adding. Send important receipts on WhatsApp too.</div>
@@ -101,6 +101,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
   function sym(c){ return c==='INR'?'\u20B9':(c==='USD'?'US$':'\u20A9'); }
   function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
   function inrOf(e){ return e.card!=null ? {v:e.card, est:!!e.est} : {v:e.amt/(RATES[e.cur]||1)*RATES.INR, est:true}; }
+  function usdBracket(inr){ return ' (~$'+fmt((inr/RATES.INR).toFixed(2))+')'; }
 
   var lb=document.getElementById('lb'), lbi=document.getElementById('lb-img');
   document.addEventListener('click',function(ev){
@@ -128,9 +129,9 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
       rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; sums[g]+=r.v; if(r.est) est[g]=true; });
       if(day>=ALLOC_START && day<=ALLOC_END) sums.reimb+=(day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY);
       h+='<div class="daybox"><h3>'+dayLabel(day)+'</h3>';
-      if(sums.reimb>0) h+='<div class="dline"><span>Hotel + Transport</span><span>'+(est.reimb?'~':'')+'\u20B9'+fmt(sums.reimb.toFixed(2))+'</span></div>';
-      if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+(est.food?'~':'')+'\u20B9'+fmt(sums.food.toFixed(2))+'</span></div>';
-      if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+(est.fees?'~':'')+'\u20B9'+fmt(sums.fees.toFixed(2))+'</span></div>';
+      if(sums.reimb>0) h+='<div class="dline"><span>Hotel + Transport</span><span>'+(est.reimb?'~':'')+'\u20B9'+fmt(sums.reimb.toFixed(2))+usdBracket(sums.reimb)+'</span></div>';
+      if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+(est.food?'~':'')+'\u20B9'+fmt(sums.food.toFixed(2))+usdBracket(sums.food)+'</span></div>';
+      if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+(est.fees?'~':'')+'\u20B9'+fmt(sums.fees.toFixed(2))+usdBracket(sums.fees)+'</span></div>';
       var th='';
       if(day===ALLOC_START) th+='<img class="rthumb" src="'+IMGS['rcpt-hotel']+'" alt="hotel receipt, card details blacked out">';
       rows.forEach(function(e){ if(e.img) th+='<img class="rthumb" src="'+IMGS[e.img]+'" alt="receipt, card details blacked out">'; else if(e.photo) th+='<img class="rthumb" src="'+e.photo+'" alt="receipt photo stored on this phone">'; });
