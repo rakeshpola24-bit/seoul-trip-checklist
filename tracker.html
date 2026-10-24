@@ -92,7 +92,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
 {d:'2026-10-24', g:'reimb', item:"Cashbee top-up (prepaid)", sub:"\u20A910,000 loaded \u00B7 paid cash, balance left unknown \u00B7 ~\u20B9716.83 est.", cur:'KRW', amt:10000, card:null, img:'rcpt-topup', name:'2026-10-24-cu-cashbee-topup.jpg', cat:'Stay & commute'},
 {d:'2026-10-24', g:'fees', item:"Hana Bank ATM fee", sub:"\u20A94,200 \u00B7 card charged \u20B91,020.87 for cash+fee; fee share \u2248 \u20B9301.95 (our split)", cur:'KRW', amt:4200, card:301.95, est:true, img:'rcpt-atm', name:'2026-10-24-hana-atm-fee.jpg', cat:'Other fees'},
 {d:'2026-10-24', g:'fees', item:"ICICI forex markup fee", sub:"\u20B920.32 \u00B7 billed Oct 24; more may post when unbilled charges settle", cur:'INR', amt:20.32, card:20.32, img:null, name:'', cat:'Other fees'},
-{d:'2026-10-24', g:'ent', item:"First place", sub:"\u20A93,000 \u00B7 owed to Kunal, not paid yet \u00B7 added per your message", cur:'KRW', amt:3000, card:null, img:null, name:'', cat:'Entertainment'},
+{d:'2026-10-24', g:'ent', item:"First place", owed:true, sub:"\u20A93,000 \u00B7 owed to Kunal, not paid yet \u00B7 added per your message", cur:'KRW', amt:3000, card:null, img:null, name:'', cat:'Entertainment'},
 {d:'2026-10-24', g:'food', item:"Lotteria meal (dine-in)", sub:"\u20A98,900 \u00B7 card charged \u20B9639.84 (unbilled) \u00B7 Personal", cur:'KRW', amt:8900, card:639.84, img:'rcpt-lotteria', name:'2026-10-24-lotteria-redacted.jpg', cat:'Personal - Food'}
   ];
   var RATES={INR:94.94, KRW:1324.45, USD:1};
@@ -129,13 +129,14 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     days.forEach(function(day){
       var rows=all.filter(function(e){return e.d===day && !e.alloc;});
       var sums={reimb:0,food:0,fees:0,ent:0}, est={reimb:false,food:false,fees:false,ent:false};
-      rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; sums[g]+=r.v; if(r.est) est[g]=true; });
+      var owed={reimb:false,food:false,fees:false,ent:false};
+      rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; sums[g]+=r.v; if(r.est) est[g]=true; if(e.owed) owed[g]=true; });
       if(day>=ALLOC_START && day<=ALLOC_END) sums.reimb+=(day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY);
       h+='<div class="daybox"><h3>'+dayLabel(day)+'</h3>';
       if(sums.reimb>0) h+='<div class="dline"><span>Hotel + Transport</span><span>'+(est.reimb?'~':'')+'\u20B9'+fmt(sums.reimb.toFixed(2))+usdBracket(sums.reimb)+'</span></div>';
       if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+(est.food?'~':'')+'\u20B9'+fmt(sums.food.toFixed(2))+usdBracket(sums.food)+'</span></div>';
       if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+(est.fees?'~':'')+'\u20B9'+fmt(sums.fees.toFixed(2))+usdBracket(sums.fees)+'</span></div>';
-      if(sums.ent>0) h+='<div class="dline"><span>Entertainment</span><span>'+(est.ent?'~':'')+'\u20B9'+fmt(sums.ent.toFixed(2))+usdBracket(sums.ent)+'</span></div>';
+      if(sums.ent>0) h+='<div class="dline"><span>Entertainment'+(owed.ent?' (owed, not paid)':'')+'</span><span>'+(est.ent?'~':'')+'\u20B9'+fmt(sums.ent.toFixed(2))+usdBracket(sums.ent)+'</span></div>';
       var th='';
       if(day===ALLOC_START) th+='<img class="rthumb" src="'+IMGS['rcpt-hotel']+'" alt="hotel receipt, card details blacked out">';
       rows.forEach(function(e){ if(e.img) th+='<img class="rthumb" src="'+IMGS[e.img]+'" alt="receipt, card details blacked out">'; else if(e.photo) th+='<img class="rthumb" src="'+e.photo+'" alt="receipt photo stored on this phone">'; });
