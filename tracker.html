@@ -12,6 +12,12 @@ h1 { font-size:22px; margin:8px 0 2px; }
 .daybox h3 { margin:0 0 6px; font-size:16px; color:#2f5f55; }
 .dline { display:flex; justify-content:space-between; padding:6px 0; font-size:15.5px; }
 .dline span:last-child { font-weight:700; }
+.dtotal { border-top:1px solid #e3dbd4; margin-top:5px; padding-top:9px; color:#2f5f55; }
+.allowtop { background:#f7f3f0; border-radius:12px; padding:12px 16px 10px; margin-bottom:14px; }
+.atr { display:flex; justify-content:space-between; font-size:15.5px; color:#2f5f55; }
+.abar { height:10px; background:#e8e0da; border-radius:6px; margin:9px 0 7px; overflow:hidden; }
+.afill { height:100%; background:#4a7c6f; border-radius:6px; }
+.atr2 { font-size:12px; color:#999; line-height:1.5; }
 .dthumbs { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
 .rthumb { width:52px; height:52px; object-fit:cover; border-radius:6px; cursor:pointer; }
 details { margin-top:18px; border-top:1px solid #eee; padding-top:10px; }
@@ -39,6 +45,12 @@ table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4
 <h1>Korea trip expenses</h1>
 <div class="sub">Seoul, Oct 23 - Nov 1 &middot; <a href="index.html">Open trip checklist</a></div>
 
+<div class="allowtop">
+<div class="atr"><span>Allowance spent</span><span><b>~$1,126.43</b> of $1,600</span></div>
+<div class="abar"><div class="afill" style="width:70.4%"></div></div>
+<div class="atr2">Left ~$473.57 &middot; personal &amp; unpaid excluded</div>
+</div>
+
 <div id="days"></div>
 
 <details>
@@ -52,11 +64,11 @@ table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4
 <div class="r"><span>Spent so far</span><span><b>~US$1,126.43</b></span></div>
 <div class="r"><span>Left</span><span><b>~US$473.57</b></span></div>
 </div>
-<div class="small">Food is shown as "not reimbursed" per your label; the US$45/day food allowance is separate and unchanged.</div>
+<div class="small">Counted in Spent: hotel (paid once), transport, fees. Not counted: personal food &#8377;639.84 (~$6.74) and owed to Kunal &#8361;13,000 (~$9.81). Food is shown as "not reimbursed" per your label; the US$45/day food allowance is separate and unchanged.</div>
 
 <h2>All entries</h2>
 <div id="detailwrap"></div>
-<div class="small">"~&#8377;" = estimated rupees at Oct 23 rates (1 US$ = &#8377;94.94 = &#8361;1,324.45); US$ in brackets are approximate at the same rate; the rest are actual ICICI card charges (unbilled ones can shift slightly when they post). The ATM fee's rupee share (&#8377;301.95) is our calculated split of the &#8377;1,020.87 card charge, not bank-itemized. &#8361;10,000 cash withdrawn Oct 24 is not spending - it funded the &#8361;10,000 top-up; only the &#8361;4,200 ATM fee counts. &#8361;10,000 cash received from Kunal on Oct 24 ("for safer side") is a loan to repay, not spending. You also owe Kunal &#8361;3,000 for the first place (not paid yet). Total owed to Kunal: &#8361;13,000. Fees are marked "to confirm" - you said fees count as reimbursed if they fall in a reimbursed category; whether the ATM and card fees qualify is not confirmed yet. Hotel &#8377;102,893.89 was paid once on Oct 22 for the whole stay. The booking is 9 nights (check-in Oct 23, check-out Nov 1); per your instruction the day boxes spread the total over 10 days, Oct 23 - Nov 1 (&#8377;10,289.39/day, first day &#8377;10,289.38 after 9-paisa rounding), to line up with the 10 allowance days. This spread is a presentation choice - the booking stays 9 nights. Lotteria was labeled Personal by you.</div>
+<div class="small">"~&#8377;" = estimated rupees at Oct 23 rates (1 US$ = &#8377;94.94 = &#8361;1,324.45); US$ in brackets are approximate at the same rate; the rest are actual ICICI card charges (unbilled ones can shift slightly when they post). The ATM fee's rupee share (&#8377;301.95) is our calculated split of the &#8377;1,020.87 card charge, not bank-itemized. &#8361;10,000 cash withdrawn Oct 24 is not spending - it funded the &#8361;10,000 top-up; only the &#8361;4,200 ATM fee counts. &#8361;10,000 cash received from Kunal on Oct 24 ("for safer side") is a loan to repay, not spending. You also owe Kunal &#8361;3,000 for the first place (not paid yet). Total owed to Kunal: &#8361;13,000. Fees are marked "to confirm" - you said fees count as reimbursed if they fall in a reimbursed category; whether the ATM and card fees qualify is not confirmed yet. Hotel &#8377;102,893.89 was paid once on Oct 22 for the whole stay. The booking is 9 nights (check-in Oct 23, check-out Nov 1); per your instruction the day boxes spread the total over 10 days, Oct 23 - Nov 1 (&#8377;10,289.39/day, first day &#8377;10,289.38 after 9-paisa rounding), to line up with the 10 allowance days. This spread is a presentation choice - the booking stays 9 nights. Day total adds up the costs attributed to that day, including the hotel spread - it is not that day's card debits, and it leaves out anything owed but not paid yet. Lotteria was labeled Personal by you.</div>
 
 <h2>Add a receipt</h2>
 <div class="small" style="color:#777">Saved <b>only on this phone, in this browser</b> - not uploaded, lost if browser data is cleared. Use Download backup after adding. Send important receipts on WhatsApp too.</div>
@@ -138,10 +150,9 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
       if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+(est.food?'~':'')+'\u20B9'+fmt(sums.food.toFixed(2))+usdBracket(sums.food)+'</span></div>';
       if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+(est.fees?'~':'')+'\u20B9'+fmt(sums.fees.toFixed(2))+usdBracket(sums.fees)+'</span></div>';
       if(sums.ent>0) h+='<div class="dline"><span>Entertainment'+(owed.ent?' (owed, not paid)':'')+'</span><span>'+(est.ent?'~':'')+'\u20B9'+fmt(sums.ent.toFixed(2))+usdBracket(sums.ent)+'</span></div>';
-      var th='';
-      if(day===ALLOC_START) th+='<img class="rthumb" src="'+IMGS['rcpt-hotel']+'" alt="hotel receipt, card details blacked out">';
-      rows.forEach(function(e){ if(e.img) th+='<img class="rthumb" src="'+IMGS[e.img]+'" alt="receipt, card details blacked out">'; else if(e.photo) th+='<img class="rthumb" src="'+e.photo+'" alt="receipt photo stored on this phone">'; });
-      if(th) h+='<div class="dthumbs">'+th+'</div>';
+      var dayTotal=hotelAmt+sums.reimb+sums.food+sums.fees+(owed.ent?0:sums.ent);
+      var dayEst=est.reimb||est.food||est.fees||(!owed.ent&&est.ent);
+      if(dayTotal>0) h+='<div class="dline dtotal"><span>Day total</span><span>'+(dayEst?'~':'')+'\u20B9'+fmt(dayTotal.toFixed(2))+usdBracket(dayTotal)+'</span></div>';
       h+='</div>';
     });
     document.getElementById('days').innerHTML=h;
