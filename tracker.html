@@ -26,6 +26,18 @@ a { color: var(--ink); }
 .warn { background: #f4efec; border-radius: 12px; padding: 10px 14px; font-size: 14px; margin: 8px 0; }
 .foot { margin-top: 22px; font-size: 12px; color: var(--ink2); border-top: 1px solid var(--hairline); padding-top: 10px; }
 .orig { color:#777; font-size:13px; }
+
+.tblwrap { overflow-x:auto; }
+.tbl { width:100%; border-collapse:collapse; font-size:14px; }
+.tbl th { text-align:left; color:var(--ink2); font-weight:600; font-size:12px; padding:6px 6px 6px 0; border-bottom:2px solid var(--hairline); }
+.tbl td { padding:8px 6px 8px 0; border-bottom:1px solid var(--hairline); vertical-align:top; }
+.tbl tr.daytot td { font-weight:600; background:#f4efec; }
+.tdate { white-space:nowrap; font-weight:600; }
+.tcat { color:var(--teal); font-weight:600; font-size:13px; }
+.tamt { white-space:nowrap; text-align:right; font-weight:600; }
+.tnote { color:#777; font-size:12px; display:block; font-weight:400; }
+.rthumb2 { width:56px; height:auto; border-radius:6px; border:1px solid var(--hairline); cursor:pointer; display:block; }
+.tsave { font-size:12px; display:inline-block; margin-top:4px; }
 </style></head>
 <body><div class="card">
 <h1>Korea trip expenses</h1>
@@ -45,8 +57,8 @@ a { color: var(--ink); }
 <div class="ph"><span><b>Total paid out</b></span><span><b>~US$1,110.36</b></span></div>
 <div class="bagnote" style="margin-top:6px">"Paid out" is money spent or loaded, not all used yet: it includes &#8361;10,000 (~US$7.55) loaded on the transit card (balance left not tracked). Cash, not spending: Oct 24 withdrew &#8361;10,000 from Hana Bank ATM; it went into the top-up, counted only there.</div>
 
-<h2>Daily spending</h2>
-<div id="daywise"></div>
+<h2>Spending by day</h2>
+<div class="tblwrap" id="tablewrap"></div>
 
 <h2>Add a receipt</h2>
 <div class="bagnote">Saved <b>only on this phone, in this browser</b> - not uploaded, lost if browser data is cleared. Use Download backup after adding. Send important receipts on WhatsApp too; they get checked, blacked out and added here properly.</div>
@@ -74,7 +86,7 @@ a { color: var(--ink); }
 <script>
 (function(){
   var FIXED=[
-{d:'2026-10-22', item:"Hotel Sinchon Number 25, 9 nights (paid Oct 22, prepaid for whole stay)", cat:'Stay & commute', cur:'INR', amt:102893.89, usd:'1083.78', orig:"₹102,893.89", img:'rcpt-hotel', name:'hotel-ereceipt-2026-10-23-redacted.jpg', note:"Paid before the trip started."},
+{d:'2026-10-22', item:"Hotel Sinchon Number 25, 9 nights (paid Oct 22, prepaid for whole stay)", cat:'Stay & commute', cur:'INR', amt:102893.89, usd:'1083.78', orig:"₹102,893.89", img:'rcpt-hotel', name:'hotel-ereceipt-2026-10-22-redacted.jpg', note:"Paid before the trip started."},
 {d:'2026-10-23', item:"Airport bus 6002, Incheon T1 to Sinchon Station", cat:'Stay & commute', cur:'KRW', amt:17000, usd:'12.84', orig:"₩17,000", img:'rcpt-bus', name:'2026-10-23-airport-bus-6002.jpg'},
 {d:'2026-10-24', item:"Cashbee transit card (CU store, Sinchon)", cat:'Stay & commute', cur:'KRW', amt:4000, usd:'3.02', orig:"₩4,000", img:'rcpt-cucard', name:'2026-10-24-cu-cashbee-card.jpg'},
 {d:'2026-10-24', item:"Cashbee top-up - prepaid, amount loaded, balance left unknown", cat:'Stay & commute', cur:'KRW', amt:10000, usd:'7.55', orig:"₩10,000", img:'rcpt-topup', name:'2026-10-24-cu-cashbee-topup.jpg'},
@@ -96,29 +108,40 @@ a { color: var(--ink); }
   });
   lb.addEventListener('click',function(){ lb.style.display='none'; lbi.src=''; });
 
-  function entryHtml(e, local){
-    var h='<p><b>'+esc(e.cat)+':</b> '+esc(e.item)+' - ';
-    if(local){ h+= sym(e.cur)+fmt(e.amt); } else { h+='US$'+fmt(e.usd)+' <span class="orig">('+esc(e.orig)+')</span>'; }
-    if(e.note){ h+=' <span class="orig">'+esc(e.note)+'</span>'; }
-    h+='</p>';
-    if(e.img){ h+='<img class="rthumb" src="'+IMGS[e.img]+'" alt="receipt, card details blacked out" style="max-height:200px;max-width:100%;width:auto;border-radius:12px;border:1px solid var(--hairline);display:block;cursor:pointer;margin-top:6px">'
-      +'<p style="color:#777;font-size:13px;margin:4px 0"><a href="#" data-dlimg="'+e.img+'" data-name="'+e.name+'">Download receipt</a></p>'; }
-    if(e.photo){ h+='<img class="rthumb" src="'+e.photo+'" alt="receipt photo stored on this phone" style="max-height:200px;max-width:100%;width:auto;border-radius:12px;border:1px solid var(--hairline);display:block;cursor:pointer;margin-top:6px">'; }
-    return h;
-  }
+  function usdNum(e){ return e.amt/(RATES[e.cur]||1); }
 
-  function renderDays(){
+  function renderTable(){
     var all=FIXED.concat(loadLocal().map(function(e){ e.local=true; return e; }));
     var days=[]; all.forEach(function(e){ if(days.indexOf(e.d)<0) days.push(e.d); });
     days.sort();
-    var box=document.getElementById('daywise');
-    box.innerHTML='';
+    var h='<table class="tbl"><thead><tr><th>Date</th><th>Item</th><th>Category</th><th style="text-align:right">~US$</th><th>Receipt</th></tr></thead><tbody>';
+    var grand=0;
     days.forEach(function(day){
-      var div=document.createElement('div'); div.className='day';
-      var h='<h3>'+day.slice(5).replace('-','/')+(day==='2026-10-22'?' (before trip)':'')+'</h3>';
-      all.filter(function(e){return e.d===day;}).forEach(function(e){ h+=entryHtml(e, e.local); });
-      div.innerHTML=h; box.appendChild(div);
+      var rows=all.filter(function(e){return e.d===day;});
+      var dtot=0, first=true;
+      rows.forEach(function(e){
+        dtot+=usdNum(e);
+        var amt = e.local ? '~US$'+(Math.round(usdNum(e)*100)/100).toFixed(2) : 'US$'+fmt(e.usd);
+        var orig = e.local ? (sym(e.cur)+fmt(e.amt)+' at Oct 23 rates') : e.orig;
+        h+='<tr><td class="tdate">'+(first?day.slice(5).replace('-','/'):'')+(first&&day==='2026-10-22'?'<span class="tnote">before trip</span>':'')+'</td>'
+          +'<td>'+esc(e.item)
+          +(e.note?'<span class="tnote">'+esc(e.note)+'</span>':'')
+          +(e.local?'<span class="tnote">added on this phone</span>':'')
+          +'<span class="tnote">'+esc(orig)+'</span></td>'
+          +'<td class="tcat">'+esc(e.cat)+'</td>'
+          +'<td class="tamt">'+amt+'</td><td>';
+        if(e.img){ h+='<img class="rthumb rthumb2" src="'+IMGS[e.img]+'" alt="receipt, card details blacked out"><a href="#" class="tsave" data-dlimg="'+e.img+'" data-name="'+e.name+'">Save</a>'; }
+        else if(e.photo){ h+='<img class="rthumb rthumb2" src="'+e.photo+'" alt="receipt photo stored on this phone">'; }
+        else { h+='<span class="tnote">-</span>'; }
+        h+='</td></tr>';
+        first=false;
+      });
+      grand+=dtot;
+      h+='<tr class="daytot"><td></td><td>'+day.slice(5).replace('-','/')+' total</td><td></td><td class="tamt">~US$'+fmt(dtot.toFixed(2))+'</td><td></td></tr>';
     });
+    h+='<tr class="daytot"><td></td><td><b>Total paid out</b></td><td></td><td class="tamt"><b>~US$'+fmt(grand.toFixed(2))+'</b></td><td></td></tr>';
+    h+='</tbody></table>';
+    document.getElementById('tablewrap').innerHTML=h;
   }
 
   function renderLocal(){
@@ -131,7 +154,7 @@ a { color: var(--ink); }
       box.appendChild(d);
     });
     [].slice.call(box.querySelectorAll('[data-del]')).forEach(function(a){
-      a.addEventListener('click',function(ev){ ev.preventDefault(); var arr=loadLocal(); arr.splice(+a.getAttribute('data-del'),1); saveLocal(arr); renderLocal(); renderDays(); });
+      a.addEventListener('click',function(ev){ ev.preventDefault(); var arr=loadLocal(); arr.splice(+a.getAttribute('data-del'),1); saveLocal(arr); renderLocal(); renderTable(); });
     });
   }
 
@@ -152,7 +175,7 @@ a { color: var(--ink); }
            item:item, cat:document.getElementById('ar-cat').value,
            cur:document.getElementById('ar-cur').value, amt:amt};
     var f=document.getElementById('ar-photo').files[0];
-    function done(){ var arr=loadLocal(); arr.push(e); saveLocal(arr); renderLocal(); renderDays();
+    function done(){ var arr=loadLocal(); arr.push(e); saveLocal(arr); renderLocal(); renderTable();
       document.getElementById('ar-item').value=''; document.getElementById('ar-amt').value=''; document.getElementById('ar-photo').value=''; }
     if(f){ if(f.size>3000000){ alert('Photo is large; please pick a smaller one.'); return; }
       var r=new FileReader(); r.onload=function(){ e.photo=r.result; done(); }; r.readAsDataURL(f);
@@ -180,7 +203,7 @@ a { color: var(--ink); }
     document.body.appendChild(a); a.click(); a.remove();
   });
 
-  renderDays(); renderLocal();
+  renderTable(); renderLocal();
 })();
 </script>
 </body></html>
