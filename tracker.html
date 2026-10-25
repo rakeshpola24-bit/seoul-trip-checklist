@@ -29,6 +29,20 @@ h2 { font-size:15px; color:#4a7c6f; margin:18px 0 6px; }
 table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4px; }
 .tbl th { text-align:left; font-size:11.5px; color:#999; font-weight:600; padding:5px 4px; border-bottom:2px solid #eee; }
 .tbl td { padding:8px 4px; border-bottom:1px solid #f0ece8; vertical-align:top; }
+.tblwrap { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:#4a7c6f #f0ece8; border-radius:8px; }
+.tblwrap::-webkit-scrollbar { height:8px; }
+.tblwrap::-webkit-scrollbar-thumb { background:#4a7c6f; border-radius:4px; }
+.tblwrap::-webkit-scrollbar-track { background:#f0ece8; }
+table.view { min-width:600px; }
+table.view td.num, table.view th.num { text-align:right; white-space:nowrap; }
+tr.owedrow td { background:#fdf6ec; }
+tr.secrow td { background:#eef4f1; color:#4a7c6f; font-weight:700; font-size:12px; padding:6px 4px; position:static; }
+tr.totrow td { font-weight:700; border-top:2px solid #eee; }
+.strack { height:8px; background:#f0ece8; border-radius:4px; margin-top:2px; position:relative; }
+.sthumb { position:absolute; top:0; left:0; height:8px; background:#4a7c6f; border-radius:4px; }
+table.view th:nth-child(1), table.view td:nth-child(1) { position:sticky; left:0; background:#fff; z-index:2; width:48px; min-width:48px; max-width:48px; }
+table.view th:nth-child(2), table.view td:nth-child(2) { position:sticky; left:48px; background:#fff; z-index:2; width:104px; min-width:104px; max-width:104px; }
+tr.owedrow td:nth-child(1), tr.owedrow td:nth-child(2) { background:#fdf6ec; }
 .tdate { white-space:nowrap; font-weight:600; font-size:12.5px; }
 .tnote { display:block; font-size:11.5px; color:#999; font-weight:400; margin-top:2px; }
 .tamt { text-align:right; white-space:nowrap; font-weight:600; }
@@ -52,7 +66,12 @@ table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4
 <div class="atr2">Food + entertainment savings: pending - a few items to confirm</div>
 </div>
 
-<div id="days"></div>
+<div class="small" style="margin:2px 2px 6px;color:#777">Grouped by category. Swipe sideways on the table to see all columns. Shaded rows are owed (not paid yet) - counted in their category total, named, and never inside Paid so far.</div>
+<div class="tblwrap" id="tblwrap"><div id="maintable"></div></div>
+<div class="strack" id="strack"><div class="sthumb" id="sthumb"></div></div>
+
+<h2 style="margin-top:16px">Not spending - cash &amp; transfers</h2>
+<div class="small">&#8361;10,000 "Took Cash" (Day 2 per your list; source not specified - the Oct 24 ATM withdrawal of &#8361;10,000 funded the top-up). &#8361;10,000 cash from Kunal - a loan to repay, not spending (you first mentioned it Oct 24; your day-wise list says Day 3 - one loan, day to confirm). &#8377;6,000 sent to Vishal (Day 3) - a transfer, not an expense.</div>
 
 <details>
 <summary>Details, add receipt &amp; downloads</summary>
@@ -107,10 +126,10 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
 {d:'2026-10-24', g:'fees', item:"ICICI forex markup fee", sub:"\u20B920.32 \u00B7 billed Oct 24; more may post when unbilled charges settle", cur:'INR', amt:20.32, card:20.32, img:null, name:'', cat:'Other fees'},
 {d:'2026-10-24', g:'ent', item:"Museum entry", owed:true, owedTo:'Kunal', sub:"\u20A93,000 \u00B7 owed to Kunal, not paid yet \u00B7 Day 2 \u00B7 matches the 'first place' from your Oct 24 message (same day, same amount) - kept as one entry", cur:'KRW', amt:3000, card:null, img:null, name:'', cat:'Entertainment'},
 {d:'2026-10-24', g:'ent', item:"Lotte Tower (Seoul Sky) ticket", owed:true, sub:"$26 \u00B7 you need to pay it, not paid yet \u00B7 added per your Oct 25 message (Day 2)", cur:'USD', amt:26, card:null, img:null, name:'', cat:'Entertainment'},
-{d:'2026-10-25', g:'food', item:"Dinner", owed:true, owedTo:'Amit', sub:"\u20A95,000 \u00B7 you owe Amit, not paid yet \u00B7 Day 3 per your day-wise list", cur:'KRW', amt:5000, card:null, img:null, name:'', cat:'Food'},
 {d:'2026-10-24', g:'food', item:"Lotteria meal (dine-in)", sub:"\u20A98,900 \u00B7 card charged \u20B9639.84 (unbilled) \u00B7 Personal", cur:'KRW', amt:8900, card:639.84, img:'rcpt-lotteria', name:'2026-10-24-lotteria-redacted.jpg', cat:'Personal - Food'},
 {d:'2026-10-25', g:'reimb', item:"Train", sub:"\u20A94,000 \u00B7 Day 3 per your day-wise list \u00B7 no receipt yet", cur:'KRW', amt:4000, card:null, img:null, name:'', cat:'Stay & commute'},
-{d:'2026-10-25', g:'food', item:"Lunch", sub:"\u20A915,000 \u00B7 Day 3 per your day-wise list \u00B7 no receipt yet", cur:'KRW', amt:15000, card:null, img:null, name:'', cat:'Food'}
+{d:'2026-10-25', g:'food', item:"Lunch", sub:"\u20A915,000 \u00B7 Day 3 per your day-wise list \u00B7 no receipt yet", cur:'KRW', amt:15000, card:null, img:null, name:'', cat:'Food'},
+{d:'2026-10-25', g:'food', item:"Dinner", owed:true, owedTo:'Amit', sub:"\u20A95,000 \u00B7 you owe Amit, not paid yet \u00B7 Day 3 per your day-wise list", cur:'KRW', amt:5000, card:null, img:null, name:'', cat:'Food'}
   ];
   var RATES={INR:94.94, KRW:1324.45, USD:1};
   var KEY='myreceipts-v1';
@@ -139,32 +158,77 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
   }
 
   function amtStr(list, inr, est){ var by={}; list.forEach(function(e){ by[e.cur]=(by[e.cur]||0)+e.amt; }); var keys=Object.keys(by); var s=''; if(!(keys.length===1 && keys[0]==='INR')){ s+=keys.map(function(k){ var v=by[k]; return sym(k)+fmt(v%1?v.toFixed(2):String(v)); }).join(' + ')+' \u00B7 '; } s+=(est?'~':'')+'\u20B9'+fmt(inr.toFixed(2)); if(!by.KRW) s+=' \u00B7 ~\u20A9'+fmt(String(Math.round(inr*RATES.KRW/RATES.INR))); if(!by.USD) s+=usdBracket(inr); return s; }
-  function renderDays(){
-    var all=FIXED.concat(loadLocal());
-    var days=[];
-    for(var t=Date.parse(ALLOC_START); t<=Date.parse(ALLOC_END); t+=86400000){ days.push(new Date(t).toISOString().slice(0,10)); }
-    all.forEach(function(e){ if(!e.alloc && days.indexOf(e.d)<0) days.push(e.d); });
-    days.sort();
-    var h='';
-    days=days.filter(function(d){return d!==DAY1;});
-    days.forEach(function(day){
-      var rows=all.filter(function(e){return (e.d===day || (day===ALLOC_START && e.d===DAY1)) && !e.alloc;});
-      var sums={reimb:0,food:0,fees:0,ent:0,entOwed:0,foodOwed:0}, est={reimb:false,food:false,fees:false,ent:false,entOwed:false,foodOwed:false}, lists={reimb:[],food:[],fees:[],ent:[],entOwed:[],foodOwed:[]};
-      rows.forEach(function(e){ var r=inrOf(e); var g=e.g||'reimb'; if(g==='ent' && e.owed) g='entOwed'; else if(g==='food' && e.owed) g='foodOwed'; sums[g]+=r.v; if(r.est) est[g]=true; lists[g].push(e); });
-      var hotelAmt=(day>=ALLOC_START && day<=ALLOC_END)?(day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY):0;
-      h+='<div class="daybox"><h3>'+dayLabel(day)+'</h3>';
-      if(hotelAmt>0) h+='<div class="dline"><span>Hotel</span><span>'+amtStr([{cur:'INR',amt:hotelAmt}],hotelAmt,false)+'</span></div>';
-      if(sums.reimb>0) h+='<div class="dline"><span>Transport</span><span>'+amtStr(lists.reimb,sums.reimb,est.reimb)+'</span></div>';
-      if(sums.food>0) h+='<div class="dline"><span>Food (not reimbursed)</span><span>'+amtStr(lists.food,sums.food,est.food)+'</span></div>';
-      if(sums.fees>0) h+='<div class="dline"><span>Fees</span><span>'+amtStr(lists.fees,sums.fees,est.fees)+'</span></div>';
-      rows.forEach(function(e){ var g0=e.g||'reimb'; if(g0!=='ent' && !(g0==='food' && e.owed)) return; var r=inrOf(e); var lbl=e.item+(e.owed?' (owed'+(e.owedTo?' to '+e.owedTo:'')+', not paid)':''); h+='<div class="dline"><span>'+esc(lbl)+'</span><span>'+amtStr([e],r.v,r.est)+'</span></div>'; });
-      var dayTotal=hotelAmt+sums.reimb+sums.food+sums.fees+sums.ent;
-      var dayEst=est.reimb||est.food||est.fees||est.ent;
-      if(dayTotal>0) h+='<div class="dline dtotal"><span>Day total</span><span>'+(dayEst?'~':'')+'\u20B9'+fmt(dayTotal.toFixed(2))+' \u00B7 ~\u20A9'+fmt(String(Math.round(dayTotal*RATES.KRW/RATES.INR)))+usdBracket(dayTotal)+'</span></div>';
-      h+='</div>';
-    });
-    document.getElementById('days').innerHTML=h;
+  function trio(e){
+    var r=inrOf(e);
+    var krw = e.cur==='KRW' ? sym('KRW')+fmt(e.amt%1?e.amt.toFixed(2):String(e.amt)) : '~'+sym('KRW')+fmt(String(Math.round(r.v*RATES.KRW/RATES.INR)));
+    var inr = (r.est?'~':'')+sym('INR')+fmt(r.v.toFixed(2));
+    var usd = e.cur==='USD' ? sym('USD')+fmt(e.amt%1?e.amt.toFixed(2):String(e.amt)) : '~$'+fmt((r.v/RATES.INR).toFixed(2));
+    return {krw:krw, inr:inr, usd:usd, vinr:r.v};
   }
+  function dLbl(d){ if(d==='2026-10-22') return 'Day 1 \u00B7 10/22'; return dayLabel(d); }
+  function renderTables(){
+    var all=FIXED.concat(loadLocal());
+    var cats=[['accom','Accommodation'],['reimb','Transport'],['food','Food'],['fees','Fees'],['ent','Entertainment']];
+    var h='<table class="tbl view"><thead><tr><th>Day</th><th>Item</th><th class="num">&#8361; KRW</th><th class="num">&#8377; INR</th><th class="num">US$ USD</th><th>Status</th></tr></thead><tbody>';
+    var totP=0, totO=0;
+    cats.forEach(function(c){
+      var es=all.filter(function(e){ return c[0]==='accom' ? e.alloc : ((e.g||'reimb')===c[0] && !e.alloc); });
+      if(!es.length) return;
+      es.sort(function(a,b){ return String(a.d)<String(b.d)?-1:(String(a.d)>String(b.d)?1:0); });
+      h+='<tr class="secrow"><td colspan="6">'+c[1]+'</td></tr>';
+      var cinr=0, cest=false, cowed=0, unpaid=[];
+      es.forEach(function(e){
+        var t=trio(e); cinr+=t.vinr; if(t.vinr && (e.cur!=='INR' && !e.card)) cest=true; if(e.est) cest=true;
+        var dayc = e.alloc ? 'Days 1-10' : dLbl(e.d);
+        var note = '';
+        if(e.alloc) note='<span class="tnote">paid once Oct 22 for 9 nights (\u20B911,432.65/night); for the allowance it is spread \u20B910,289.39/day over your 10 tracking days</span>';
+        if(e.item==='Hana Bank ATM fee') note='<span class="tnote">rupee share is our split of the combined \u20B91,020.87 card debit, not bank-itemized</span>';
+        var status = e.owed ? ('Not paid'+(e.owedTo?' - owe '+esc(e.owedTo):' - to whom not confirmed')) : ('Paid'+(e.card && !e.est?' (card)':''));
+        if(e.owed){ cowed+=t.vinr; totO+=t.vinr; unpaid.push(sym(e.cur)+fmt(e.amt%1?e.amt.toFixed(2):String(e.amt))+(e.owedTo?' (owe '+e.owedTo+')':' (to whom not confirmed)')); } else { totP+=t.vinr; }
+        h+='<tr'+(e.owed?' class="owedrow"':'')+'><td>'+dayc+'</td><td>'+esc(e.item)+note+'</td><td class="num">'+t.krw+'</td><td class="num">'+t.inr+'</td><td class="num">'+t.usd+'</td><td>'+status+'</td></tr>';
+      });
+      var allK=es.every(function(e){return e.cur==='KRW';}), allU=es.every(function(e){return e.cur==='USD';});
+      var kc = allK ? sym('KRW')+fmt(String(es.reduce(function(s,e){return s+e.amt;},0))) : '~'+sym('KRW')+fmt(String(Math.round(cinr*RATES.KRW/RATES.INR)));
+      var uc = allU ? sym('USD')+fmt(String(es.reduce(function(s,e){return s+e.amt;},0))) : '~$'+fmt((cinr/RATES.INR).toFixed(2));
+      var ic = (cest?'~':'')+sym('INR')+fmt(cinr.toFixed(2));
+      var unote = cowed>0 ? '<span class="tnote">'+(cowed>=cinr-0.005?'none paid yet: ':'of which not paid yet: ')+unpaid.join(', ')+'</span>' : '';
+      h+='<tr class="totrow"><td></td><td>'+c[1]+' total'+unote+'</td><td class="num">'+kc+'</td><td class="num">'+ic+'</td><td class="num">'+uc+'</td><td></td></tr>';
+    });
+    h+='<tr class="secrow"><td colspan="6">Overall</td></tr>';
+    h+='<tr class="totrow"><td></td><td>Paid so far (matches Allowance spent above)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totP*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(totP.toFixed(2))+'</td><td class="num">~$'+fmt((totP/RATES.INR).toFixed(2))+'</td><td></td></tr>';
+    h+='<tr class="totrow"><td></td><td>Not paid yet (owed)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totO*RATES.KRW/RATES.INR)))+'</td><td class="num">~'+sym('INR')+fmt(totO.toFixed(2))+'</td><td class="num">~$'+fmt((totO/RATES.INR).toFixed(2))+'</td><td></td></tr>';
+    h+='</tbody></table>';
+    document.getElementById('maintable').innerHTML=h;
+    updScroll();
+  }
+  function updScroll(){
+    var w=document.getElementById('tblwrap'), t=document.getElementById('sthumb'), tr=document.getElementById('strack');
+    if(!w||!t||!tr) return;
+    var frac=w.clientWidth/w.scrollWidth;
+    if(frac>=1){ tr.style.display='none'; return; }
+    tr.style.display='block';
+    t.style.width=(frac*100)+'%';
+    t.style.left=(w.scrollLeft/Math.max(1,(w.scrollWidth-w.clientWidth))*(100-frac*100))+'%';
+  }
+  (function(){
+    var w=document.getElementById('tblwrap'), tr=document.getElementById('strack');
+    if(w){ w.addEventListener('scroll', updScroll); }
+    if(window.addEventListener){ window.addEventListener('resize', updScroll); }
+    if(w&&tr){
+      tr.style.touchAction='none';
+      tr.style.cursor='pointer';
+      var drag=false;
+      var seek=function(clientX){
+        var r=tr.getBoundingClientRect();
+        var frac=Math.min(1,Math.max(0,(clientX-r.left)/r.width));
+        w.scrollLeft=frac*(w.scrollWidth-w.clientWidth);
+      };
+      tr.addEventListener('pointerdown', function(e){ drag=true; try{ tr.setPointerCapture(e.pointerId); }catch(_e){} seek(e.clientX); e.preventDefault(); });
+      tr.addEventListener('pointermove', function(e){ if(drag) seek(e.clientX); });
+      tr.addEventListener('pointerup', function(){ drag=false; });
+      tr.addEventListener('pointercancel', function(){ drag=false; });
+    }
+  })();
 
   function renderDetails(){
     var all=FIXED.concat(loadLocal());
@@ -199,7 +263,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
            cat:document.getElementById('ar-grp').selectedOptions[0].text,
            cur:document.getElementById('ar-cur').value, amt:amt, card:null};
     var f=document.getElementById('ar-photo').files[0];
-    function done(){ var arr=loadLocal(); arr.push(e); saveLocal(arr); renderDays(); renderDetails();
+    function done(){ var arr=loadLocal(); arr.push(e); saveLocal(arr); renderTables(); renderDetails();
       document.getElementById('ar-item').value=''; document.getElementById('ar-amt').value=''; document.getElementById('ar-photo').value=''; }
     if(f){ if(f.size>3000000){ alert('Photo is large; please pick a smaller one.'); return; }
       var r=new FileReader(); r.onload=function(){ e.photo=r.result; done(); }; r.readAsDataURL(f);
@@ -227,7 +291,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     document.body.appendChild(a); a.click(); a.remove();
   });
 
-  renderDays();
+  renderTables();
   renderDetails();
 })();
 </script></body></html>
