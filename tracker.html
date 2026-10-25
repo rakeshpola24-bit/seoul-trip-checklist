@@ -178,15 +178,15 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     var cdays=Math.max(0,Math.min(10,Math.round((Date.parse(seoulToday)-Date.parse(ALLOC_START))/86400000)));
     var eligUSD=cdays*45, savedUSD=Math.max(0,eligUSD-feUSD);
     var tot=totP+totO;
-    function trip3(usd){ return '~$'+fmt(usd.toFixed(2))+' &middot; ~\u20B9'+fmt(String(Math.round(usd*RATES.INR)))+' &middot; ~\u20A9'+fmt(String(Math.round(usd*RATES.KRW))); }
+    function trip3(usd){ return '~$'+fmt(usd.toFixed(2)); }
     var h='';
     h+='<div class="atr"><span>Accommodation + Travel</span><span><b>'+trip3(atUSD)+'</b> of $1,150 <span class="tnote">(US$115/day &times; 10 days)</span></span></div>';
     h+='<div class="abar"><div class="afill" style="width:'+Math.min(100,atUSD/1150*100).toFixed(1)+'%"></div></div>';
     h+='<div class="atr2">Left '+trip3(Math.max(0,atLeftUSD))+' &middot; hotel (paid once Oct 22) + transport &amp; fees - all settled, nothing owed here</div>';
     h+='<div class="atr" style="margin-top:10px"><span>Savings - food + entertainment</span><span><b>'+trip3(savedUSD)+'</b> saved of $'+eligUSD+' <span class="tnote">(US$45/day &times; '+cdays+' completed day'+(cdays===1?'':'s')+')</span></span></div>';
     h+='<div class="abar"><div class="afill" style="width:'+(eligUSD>0?Math.min(100,savedUSD/eligUSD*100):0).toFixed(1)+'%"></div></div>';
-    h+='<div class="atr2">Spent '+trip3(feUSD)+' so far &middot; includes not-yet-paid (museum \u20A93,000, Lotte US$26, dinner \u20A95,000) &middot; Day '+(cdays+1)+' (today) still in progress; future days are not savings yet - provisional until the trip ends</div>';
-    h+='<div class="atr2" style="margin-top:8px">Total expenses so far <b>'+trip3(tot/RATES.INR)+'</b> of the $1,600 overall budget &middot; Paid so far \u20B9'+fmt(totP.toFixed(2))+' &middot; Not paid yet ~\u20B9'+fmt(totO.toFixed(2))+'</div>';
+    h+='<div class="atr2">Spent '+trip3(feUSD)+' so far &middot; includes not-yet-paid (museum ~$2.27, Lotte $26, dinner ~$3.78) &middot; Day '+(cdays+1)+' (today) still in progress; future days are not savings yet - provisional until the trip ends</div>';
+    h+='<div class="atr2" style="margin-top:8px">Total expenses so far <b>'+trip3(tot/RATES.INR)+'</b> of the $1,600 overall budget &middot; Paid so far ~$'+fmt((totP/RATES.INR).toFixed(2))+' &middot; Not paid yet ~$'+fmt((totO/RATES.INR).toFixed(2))+'</div>';
     document.getElementById('allowtop').innerHTML=h;
   }
   function renderDayTable(){
