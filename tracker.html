@@ -34,13 +34,14 @@ table.tbl { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4
 .tblwrap::-webkit-scrollbar-thumb { background:#4a7c6f; border-radius:4px; }
 .tblwrap::-webkit-scrollbar-track { background:#f0ece8; }
 table.view { min-width:600px; }
+.catsel { font-size:11px; padding:2px 1px; max-width:96px; }
 table.view td.num, table.view th.num { text-align:right; white-space:nowrap; }
 tr.owedrow td { background:#fdf6ec; }
 tr.secrow td { background:#eef4f1; color:#4a7c6f; font-weight:700; font-size:12px; padding:6px 4px; position:static; }
 tr.totrow td { font-weight:700; border-top:2px solid #eee; }
 .strack { height:8px; background:#f0ece8; border-radius:4px; margin-top:2px; position:relative; }
 .sthumb { position:absolute; top:0; left:0; height:8px; background:#4a7c6f; border-radius:4px; }
-table.view th:nth-child(1), table.view td:nth-child(1) { position:sticky; left:0; background:#fff; z-index:2; width:120px; min-width:120px; max-width:120px; }
+table.view th:nth-child(1), table.view td:nth-child(1) { position:sticky; left:0; background:#fff; z-index:2; width:110px; min-width:110px; max-width:110px; }
 tr.owedrow td:nth-child(1) { background:#fdf6ec; }
 .tdate { white-space:nowrap; font-weight:600; font-size:12.5px; }
 .tnote { display:block; font-size:11.5px; color:#999; font-weight:400; margin-top:2px; }
@@ -163,8 +164,18 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     return {krw:krw, inr:inr, usd:usd, vinr:r.v};
   }
   function dLbl(d){ if(d==='2026-10-22') return 'Day 1 \u00B7 10/22'; return dayLabel(d); }
+  var CATOPTS=[['reimb','Travel'],['accom','Stay'],['ent','Entertainment'],['food','Food'],['fees','Fees']];
+  function catKey(e){ return e.d+'|'+e.item+'|'+e.cur+'|'+e.amt; }
+  function loadCatOv(){ try{ return JSON.parse(localStorage.getItem('catov')||'{}'); }catch(_e){ return {}; } }
+  function applyCatOv(all){ var ov=loadCatOv(); all.forEach(function(e){ var v=ov[catKey(e)]; if(v) e.g=v; }); return all; }
+  function catSel(e){
+    var g=e.g||'reimb';
+    var s='<select class="catsel" data-k="'+esc(catKey(e))+'">';
+    CATOPTS.forEach(function(o){ s+='<option value="'+o[0]+'"'+(g===o[0]?' selected':'')+'>'+o[1]+'</option>'; });
+    return s+'</select>';
+  }
   function renderTop(){
-    var all=FIXED.concat(loadLocal());
+    var all=applyCatOv(FIXED.concat(loadLocal()));
     var accom=0, travel=0, fees=0, foodent=0, totP=0, totO=0;
     all.forEach(function(e){
       var v=inrOf(e).v;
@@ -190,41 +201,41 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
     document.getElementById('allowtop').innerHTML=h;
   }
   function renderDayTable(){
-    var all=FIXED.concat(loadLocal());
+    var all=applyCatOv(FIXED.concat(loadLocal()));
     var days=[];
     for(var t=Date.parse(ALLOC_START); t<=Date.parse(ALLOC_END); t+=86400000){ days.push(new Date(t).toISOString().slice(0,10)); }
     all.forEach(function(e){ if(!e.alloc && e.d!==DAY1 && days.indexOf(e.d)<0) days.push(e.d); });
     days.sort();
-    var h='<table class="tbl view"><thead><tr><th>Item</th><th class="num">&#8361; KRW</th><th class="num">&#8377; INR</th><th class="num">US$ USD</th><th>Status</th></tr></thead><tbody>';
+    var h='<table class="tbl view"><thead><tr><th>Item</th><th class="num">&#8361; KRW</th><th class="num">&#8377; INR</th><th class="num">US$ USD</th><th>Status</th><th>Category</th></tr></thead><tbody>';
     var totP=0, totO=0;
     days.forEach(function(day){
       var rows=all.filter(function(e){ return (e.d===day || (day===ALLOC_START && e.d===DAY1)) && !e.alloc; });
       var hotelAmt=(day>=ALLOC_START && day<=ALLOC_END) ? (day===ALLOC_START?HOTEL_FIRST:HOTEL_DAILY) : 0;
-      h+='<tr class="secrow"><td colspan="5">'+dayLabel(day)+'</td></tr>';
+      h+='<tr class="secrow"><td colspan="6">'+dayLabel(day)+'</td></tr>';
       var dsum=0, dest=false;
       if(hotelAmt>0){
         dsum+=hotelAmt; totP+=hotelAmt;
         var n=Math.round((Date.parse(day)-Date.parse(ALLOC_START))/86400000)+1;
-        h+='<tr><td>Hotel day share '+n+' of 10<span class="tnote">9 nights paid once Oct 22 (\u20B911,432.65/night), spread over your 10 tracking days</span></td><td class="num">~'+sym('KRW')+fmt(String(Math.round(hotelAmt*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(hotelAmt.toFixed(2))+'</td><td class="num">~$'+fmt((hotelAmt/RATES.INR).toFixed(2))+'</td><td>Paid (card)</td></tr>';
+        h+='<tr><td>Hotel day share '+n+' of 10<span class="tnote">9 nights paid once Oct 22 (\u20B911,432.65/night), spread over your 10 tracking days</span></td><td class="num">~'+sym('KRW')+fmt(String(Math.round(hotelAmt*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(hotelAmt.toFixed(2))+'</td><td class="num">~$'+fmt((hotelAmt/RATES.INR).toFixed(2))+'</td><td>Paid (card)</td><td>Stay</td></tr>';
       }
       rows.forEach(function(e){
         var t2=trio(e); dsum+=t2.vinr; if(e.est) dest=true;
         var note = e.item==='Hana Bank ATM fee' ? '<span class="tnote">rupee share is our split of the combined \u20B91,020.87 card debit, not bank-itemized</span>' : '';
         var status = e.owed ? ('Not paid'+(e.owedTo?' - owe '+esc(e.owedTo):' - to whom not confirmed')) : ('Paid'+(e.card && !e.est?' (card)':''));
         if(e.owed) totO+=t2.vinr; else totP+=t2.vinr;
-        h+='<tr'+(e.owed?' class="owedrow"':'')+'><td>'+esc(e.item)+note+'</td><td class="num">'+t2.krw+'</td><td class="num">'+t2.inr+'</td><td class="num">'+t2.usd+'</td><td>'+status+'</td></tr>';
+        h+='<tr'+(e.owed?' class="owedrow"':'')+'><td>'+esc(e.item)+note+'</td><td class="num">'+t2.krw+'</td><td class="num">'+t2.inr+'</td><td class="num">'+t2.usd+'</td><td>'+status+'</td><td>'+catSel(e)+'</td></tr>';
       });
-      if(dsum>0) h+='<tr class="totrow"><td>Day total</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(dsum*RATES.KRW/RATES.INR)))+'</td><td class="num">'+(dest?'~':'')+sym('INR')+fmt(dsum.toFixed(2))+'</td><td class="num">~$'+fmt((dsum/RATES.INR).toFixed(2))+'</td><td></td></tr>';
+      if(dsum>0) h+='<tr class="totrow"><td>Day total</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(dsum*RATES.KRW/RATES.INR)))+'</td><td class="num">'+(dest?'~':'')+sym('INR')+fmt(dsum.toFixed(2))+'</td><td class="num">~$'+fmt((dsum/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
     });
-    h+='<tr class="secrow"><td colspan="5">Overall</td></tr>';
-    h+='<tr class="totrow"><td>Paid so far</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totP*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(totP.toFixed(2))+'</td><td class="num">~$'+fmt((totP/RATES.INR).toFixed(2))+'</td><td></td></tr>';
-    h+='<tr class="totrow"><td>Not paid yet (owed)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totO*RATES.KRW/RATES.INR)))+'</td><td class="num">~'+sym('INR')+fmt(totO.toFixed(2))+'</td><td class="num">~$'+fmt((totO/RATES.INR).toFixed(2))+'</td><td></td></tr>';
+    h+='<tr class="secrow"><td colspan="6">Overall</td></tr>';
+    h+='<tr class="totrow"><td>Paid so far</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totP*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(totP.toFixed(2))+'</td><td class="num">~$'+fmt((totP/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
+    h+='<tr class="totrow"><td>Not paid yet (owed)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totO*RATES.KRW/RATES.INR)))+'</td><td class="num">~'+sym('INR')+fmt(totO.toFixed(2))+'</td><td class="num">~$'+fmt((totO/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
     h+='</tbody></table>';
     document.getElementById('maintable').innerHTML=h;
   }
   function renderCatMini(){
-    var all=FIXED.concat(loadLocal());
-    var cats=[['accom','Accommodation'],['reimb','Transport'],['food','Food'],['fees','Fees'],['ent','Entertainment']];
+    var all=applyCatOv(FIXED.concat(loadLocal()));
+    var cats=[['accom','Stay'],['reimb','Travel'],['food','Food'],['fees','Fees'],['ent','Entertainment']];
     var h='<table class="tbl"><thead><tr><th>Category</th><th class="num">&#8361; KRW</th><th class="num">&#8377; INR</th><th class="num">US$ USD</th></tr></thead><tbody>';
     cats.forEach(function(c){
       var es=all.filter(function(e){ return c[0]==='accom' ? e.alloc : ((e.g||'reimb')===c[0] && !e.alloc); });
@@ -247,6 +258,14 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
   }
   function renderTables(){ renderTop(); renderDayTable(); renderCatMini(); updScroll(); }
 
+  document.addEventListener('change',function(ev){
+    var t=ev.target;
+    if(t.classList && t.classList.contains('catsel')){
+      var ov=loadCatOv(); ov[t.getAttribute('data-k')]=t.value;
+      try{ localStorage.setItem('catov',JSON.stringify(ov)); }catch(_e){}
+      renderTables();
+    }
+  });
   function updScroll(){
     var w=document.getElementById('tblwrap'), t=document.getElementById('sthumb'), tr=document.getElementById('strack');
     if(!w||!t||!tr) return;
