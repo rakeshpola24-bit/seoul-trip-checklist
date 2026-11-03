@@ -251,10 +251,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
       });
       if(dsum>0) h+='<tr class="totrow"><td>Day total</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(dsum*RATES.KRW/RATES.INR)))+'</td><td class="num">'+(dest?'~':'')+sym('INR')+fmt(dsum.toFixed(2))+'</td><td class="num">~$'+fmt((dsum/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
     });
-    h+='<tr class="secrow"><td colspan="6">Overall</td></tr>';
-    h+='<tr class="totrow"><td>Paid so far</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totP*RATES.KRW/RATES.INR)))+'</td><td class="num">'+sym('INR')+fmt(totP.toFixed(2))+'</td><td class="num">~$'+fmt((totP/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
-    h+='<tr class="totrow"><td>Not paid yet (owed)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totO*RATES.KRW/RATES.INR)))+'</td><td class="num">~'+sym('INR')+fmt(totO.toFixed(2))+'</td><td class="num">~$'+fmt((totO/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
-      if(totU>0) h+='<tr class="totrow"><td>To confirm (paid or not)</td><td class="num">~'+sym('KRW')+fmt(String(Math.round(totU*RATES.KRW/RATES.INR)))+'</td><td class="num">~'+sym('INR')+fmt(totU.toFixed(2))+'</td><td class="num">~$'+fmt((totU/RATES.INR).toFixed(2))+'</td><td></td><td></td></tr>';
+
     h+='</tbody></table>';
     document.getElementById('maintable').innerHTML=h;
   }
@@ -275,7 +272,7 @@ var IMGS={"rcpt-hotel": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
       var kc = allK ? sym('KRW')+fmt(String(es.reduce(function(s,e){return s+e.amt;},0))) : '~'+sym('KRW')+fmt(String(Math.round(cinr*RATES.KRW/RATES.INR)));
       var uc = allU ? sym('USD')+fmt(String(es.reduce(function(s,e){return s+e.amt;},0))) : '~$'+fmt((cinr/RATES.INR).toFixed(2));
       var ic = (cest?'~':'')+sym('INR')+fmt(cinr.toFixed(2));
-      var note = cowed>0 ? '<span class="tnote">'+(cowed>=cinr-0.005?'none paid yet: ':'not paid yet: ')+unpaid.join(', ')+'</span>' : '';
+      var note='';
       h+='<tr><td>'+c[1]+note+'</td><td class="num">'+kc+'</td><td class="num">'+ic+'</td><td class="num">'+uc+'</td></tr>';
     });
     h+='</tbody></table>';
